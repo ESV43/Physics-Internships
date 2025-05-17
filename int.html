@@ -1,0 +1,3013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Oasis - Find Your Next Opportunity</title>
+    <!-- Favicon (optional, if you have one) -->
+    <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
+
+    <!-- Font Awesome for icons (optional, but used in the design) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* ----- START OF CSS STYLES ----- */
+        :root {
+            --primary-color: #007bff; /* Deep Sky Blue */
+            --secondary-color: #6c757d; /* Grey */
+            --light-color: #f8f9fa; /* Very Light Grey */
+            --dark-color: #343a40; /* Dark Grey */
+            --accent-color: #28a745; /* Green */
+            --warning-color: #ffc107; /* Yellow */
+            --danger-color: #dc3545; /* Red */
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --card-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            --border-radius: 8px;
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.6;
+            margin: 0;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: auto;
+            overflow: hidden;
+            padding: 0 20px;
+            display: flex; /* For sidebar layout */
+            gap: 20px;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--primary-color), #0056b3);
+            color: #fff;
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        header h1 { margin-bottom: 0.2rem; }
+        header p { font-style: italic; }
+
+        .sticky-sidebar {
+            width: 300px; /* Fixed width for sidebar */
+            position: sticky;
+            top: 20px;
+            align-self: flex-start; /* Important for sticky */
+            height: calc(100vh - 40px); /* Adjust based on header/footer */
+            overflow-y: auto;
+            padding: 15px;
+            background: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+        .sticky-sidebar::-webkit-scrollbar { width: 8px; }
+        .sticky-sidebar::-webkit-scrollbar-thumb { background: var(--secondary-color); border-radius: 4px;}
+
+
+        main#internship-listings {
+            flex-grow: 1; /* Takes remaining space */
+            padding-top: 20px;
+        }
+
+        .disclaimer {
+            background-color: #fff3cd; /* Light yellow */
+            border-left: 5px solid var(--warning-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
+        }
+        .disclaimer h2 { margin-top: 0; color: #856404;}
+
+        .filters, .sorting, .favorites-section, .settings-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+        }
+        .filters h2, .sorting h2, .favorites-section h2, .settings-section h2 {
+            margin-top: 0;
+            font-size: 1.2em;
+            color: var(--primary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        .filter-group { margin-bottom: 10px; }
+        .filter-group label { display: block; margin-bottom: 5px; font-weight: bold;}
+        input[type="text"], select, input[type="number"] {
+            width: calc(100% - 20px); /* Accommodate padding */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        button i { margin-right: 5px; }
+        #clear-filters { background-color: var(--secondary-color); }
+        #clear-filters:hover { background-color: #5a6268; }
+        #view-favorites-btn.active-view { background-color: var(--accent-color); }
+
+
+        .internship-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-left: 5px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            position: relative;
+        }
+        .internship-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+        .internship-card h3 { margin-top: 0; color: var(--primary-color); font-size: 1.3em; }
+        .internship-card p { margin: 8px 0; font-size: 0.95em; }
+        .internship-card strong { color: var(--dark-color); }
+        .internship-card .deadline-soon { color: var(--danger-color); font-weight: bold; }
+        .internship-card .stipend-yes { color: var(--accent-color); font-weight: bold; }
+        .internship-card .actions { margin-top: 15px; }
+        .internship-card .actions .button {
+            margin-right: 10px;
+            padding: 8px 12px;
+            font-size: 0.9em;
+        }
+        .favorite-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            color: var(--secondary-color);
+            cursor: pointer;
+            padding: 5px; /* Easier to click */
+            transition: color 0.2s ease;
+        }
+        .favorite-btn:hover { color: var(--primary-color); }
+        .favorite-btn.active { color: var(--danger-color); }
+        .favorite-btn.active:hover { color: #a71d2a; }
+
+
+        .loader { text-align: center; padding: 50px; font-size: 1.2em; color: var(--secondary-color); }
+        .error { text-align: center; padding: 20px; color: var(--danger-color); background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: var(--border-radius); }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+            padding-top: 60px; /* Location of the box */
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 30px;
+            border-radius: var(--border-radius);
+            width: 80%;
+            max-width: 700px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .close-button {
+            color: var(--secondary-color);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .close-button:hover, .close-button:focus { color: var(--dark-color); text-decoration: none;}
+        #modal-institute-name { color: var(--primary-color); margin-bottom: 0.5em;}
+        #modal-program-name { margin-top: 0; margin-bottom: 1em; font-size: 1.2em; color: var(--dark-color); }
+
+        .modal-content p, .modal-content div {
+            margin-bottom: 10px;
+        }
+        .modal-content strong {
+            margin-right: 5px;
+        }
+        .scrollable-text {
+            max-height: 100px;
+            overflow-y: auto;
+            background: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            font-size: 0.9em;
+            white-space: pre-wrap; /* Preserve line breaks from data */
+        }
+        .official-site-warning {
+            color: var(--danger-color);
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        .official-site-warning i { margin-right: 8px;}
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            margin-top: 30px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+            }
+            .sticky-sidebar {
+                width: 100%;
+                position: static; /* No longer sticky */
+                height: auto;
+                overflow-y: visible;
+                margin-bottom: 20px;
+            }
+            .modal-content {
+                width: 90%;
+                margin: 10% auto;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.8em; }
+            .internship-card h3 { font-size: 1.1em; }
+            .sticky-sidebar { padding: 10px; }
+            input[type="text"], select, input[type="number"] {
+                 width: calc(100% - 10px); /* Adjust for smaller padding */
+            }
+        }
+        /* ----- END OF CSS STYLES ----- */
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container" style="display: block;"> <!-- Override flex for header content centering -->
+            <h1><i class="fas fa-water"></i> Internship Oasis</h1>
+            <p>Your Frontend Hub for Illustrative Internship Data</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="sticky-sidebar">
+            <div class="disclaimer">
+                <h2><i class="fas fa-exclamation-triangle"></i> Crucial Disclaimers</h2>
+                <p>This data is <strong>ILLUSTRATIVE</strong> from 2024 or earlier. Program details, deadlines, eligibility, stipends, etc., <strong>WILL CHANGE</strong> for 2025/2026.</p>
+                <p><strong>ALWAYS VISIT OFFICIAL WEBSITES</strong> for current and accurate information. This is NOT an exhaustive list.</p>
+                <p>Last data refresh: <span id="data-refresh-date">[Manually Update This Date]</span></p>
+            </div>
+
+            <div class="filters">
+                <h2><i class="fas fa-filter"></i> Filter Opportunities</h2>
+                <input type="text" id="search-box" placeholder="Search by name, program, keyword...">
+
+                <div class="filter-group">
+                    <label for="region-filter">Region:</label>
+                    <select id="region-filter">
+                        <option value="">All Regions</option>
+                        <option value="India">India</option>
+                        <option value="North America">North America</option>
+                        <option value="Europe">Europe</option>
+                        <option value="Asia (Outside India)">Asia (Outside India)</option>
+                        <option value="Australia/NZ">Australia & New Zealand</option>
+                        <option value="Other International">Other International</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="stipend-filter">Stipend:</label>
+                    <select id="stipend-filter">
+                        <option value="">Any</option>
+                        <option value="Yes">Paid</option>
+                        <option value="No">Unpaid</option>
+                        <option value="Varies">Varies</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="mode-filter">Mode (Past):</label>
+                    <select id="mode-filter">
+                        <option value="">Any</option>
+                        <option value="Offline">Offline</option>
+                        <option value="Hybrid">Hybrid</option>
+                        <option value="Online">Online</option> <!-- Though your data seems mostly offline -->
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="eligibility-filter">Eligibility Level (Illustrative):</label>
+                    <select id="eligibility-filter">
+                        <option value="">Any</option>
+                        <option value="UG">Undergraduate</option>
+                        <option value="PG">Postgraduate</option>
+                        <option value="UG_PG">UG or PG</option>
+                    </select>
+                </div>
+                 <button id="clear-filters"><i class="fas fa-times-circle"></i> Clear Filters</button>
+            </div>
+
+            <div class="sorting">
+                <h2><i class="fas fa-sort-amount-down"></i> Sort By</h2>
+                <select id="sort-by">
+                    <option value="deadline">Deadline (Illustrative, Earliest First)</option>
+                    <option value="name_asc">Institute Name (A-Z)</option>
+                    <option value="name_desc">Institute Name (Z-A)</option>
+                    <option value="stipend_first">Stipend (Paid First)</option>
+                </select>
+            </div>
+
+            <div class="favorites-section">
+                <h2><i class="fas fa-heart"></i> My Shortlist (<span id="favorites-count">0</span>)</h2>
+                <button id="view-favorites-btn">View Shortlist</button>
+                <button id="clear-favorites-btn">Clear Shortlist</button>
+            </div>
+
+             <div class="settings-section">
+                <h2><i class="fas fa-cog"></i> Settings</h2>
+                <label for="deadline-threshold">Highlight deadlines within (days):</label>
+                <input type="number" id="deadline-threshold" value="30" min="1" max="365">
+            </div>
+        </div>
+
+        <main id="internship-listings">
+            <div class="loader">Loading opportunities...</div>
+        </main>
+    </div>
+
+    <footer>
+        <p>© <script>document.write(new Date().getFullYear())</script> Internship Oasis. Remember to verify all information on official sites.</p>
+    </footer>
+
+    <!-- Modal for detailed view -->
+    <div id="details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">×</span>
+            <h2 id="modal-institute-name"></h2>
+            <h3 id="modal-program-name"></h3>
+            <p><strong><i class="fas fa-map-marker-alt"></i> Location:</strong> <span id="modal-location"></span></p>
+            <p><strong><i class="fas fa-calendar-alt"></i> Illustrative Deadline:</strong> <span id="modal-deadline"></span></p>
+            <p><strong><i class="fas fa-coins"></i> Stipend (Past):</strong> <span id="modal-stipend"></span></p>
+            <p><strong><i class="fas fa-laptop"></i> Mode (Past):</strong> <span id="modal-mode"></span></p>
+            <p><strong><i class="fas fa-user-graduate"></i> Eligibility Highlights (Past):</strong></p>
+            <div id="modal-eligibility" class="scrollable-text"></div>
+            <p><strong><i class="fas fa-file-alt"></i> General Required Docs (Past):</strong></p>
+            <div id="modal-documents" class="scrollable-text"></div>
+            <p class="official-site-warning">
+                <i class="fas fa-exclamation-triangle"></i> <strong>VERIFY ON OFFICIAL SITE!</strong> Details subject to change.
+            </p>
+            <a href="#" id="modal-official-link" class="button" target="_blank" rel="noopener noreferrer">Visit Official Site (If Available)</a>
+        </div>
+    </div>
+
+    <!-- SCRIPT FOR INTERNSHIP DATA -->
+    <script>
+        // ----- START OF INTERNSHIP DATA (internships.js) -----
+        // IMPORTANT: REPLACE THE EMPTY ARRAY BELOW WITH YOUR ACTUAL JSON DATA
+        // converted from text.txt, as shown in the previous example.
+        // Example structure:
+        /*
+        const internships = [
+          {
+            "id": "iitb_sri_2024", // Unique ID
+            "instituteName": "IIT Bombay",
+            "programName": "Summer Research Internship",
+            "locationCity": "Mumbai",
+            "locationCountry": "India",
+            "region": "India",
+            "category": "IITs",
+            "modePast": "Offline",
+            "stipendPaidPast": "Yes",
+            "stipendDetails": "e.g., Rs. 10,000 for 8 weeks",
+            "lastDateApplyIllustrative": "2024-02-29", // Standardized YYYY-MM-DD
+            "lastDateDisplay": "Feb 29, 2024",
+            "eligibilityHighlightsPast": "Non-IITB students: 2nd/3rd yr UG, 1st yr PG.",
+            "eligibilityKeywords": ["undergraduate", "ug", "2nd year", "3rd year", "postgraduate", "pg", "1st year"],
+            "generalRequiredDocumentsPast": "Application form, transcripts, project preference.",
+            "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+            "officialLinkPlaceholder": "https://www.iitb.ac.in/en/education/student-affairs/hostel-accomodation" // Replace with ACTUAL link
+          },
+          // ... more internship objects
+        ];
+        */
+        const internships = 
+[
+  {
+    "id": "iitb_sri_2024",
+    "instituteName": "IIT Bombay",
+    "programName": "Summer Research Internship",
+    "locationCity": "Mumbai",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "e.g., Rs. 10,000 for 8 weeks",
+    "lastDateApplyIllustrative": "2024-02-29",
+    "lastDateDisplay": "Feb 29, 2024",
+    "eligibilityHighlightsPast": "Non-IITB students: 2nd/3rd yr UG, 1st yr PG.",
+    "eligibilityKeywords": ["undergraduate", "ug", "2nd year", "3rd year", "postgraduate", "pg", "1st year", "non-iitb"],
+    "generalRequiredDocumentsPast": "Application form, transcripts, project preference.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iitb.ac.in/program/summer_research_internship"
+  },
+  {
+    "id": "iitd_srfp_2023",
+    "instituteName": "IIT Delhi",
+    "programName": "Summer Research Fellowship Program",
+    "locationCity": "New Delhi",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "e.g., Rs. 500/week + travel",
+    "lastDateApplyIllustrative": "2023-03-31",
+    "lastDateDisplay": "Mar 31, 2023",
+    "eligibilityHighlightsPast": "Any UG student (except IITD) who has completed 2 years. PG students.",
+    "eligibilityKeywords": ["undergraduate", "ug", "2 years completed", "postgraduate", "pg", "non-iitd"],
+    "generalRequiredDocumentsPast": "Online application, transcript, SoP, LoR (optional).",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iitd.ac.in/program/summer_research_fellowship"
+  },
+  {
+    "id": "iitk_surge_2024",
+    "instituteName": "IIT Kanpur",
+    "programName": "SURGE Program",
+    "locationCity": "Kanpur",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend mentioned in notification",
+    "lastDateApplyIllustrative": "2024-02-18",
+    "lastDateDisplay": "Feb 18, 2024",
+    "eligibilityHighlightsPast": "Non-IITK: B.Tech/BE/B.Arch/BS (3rd yr completed), M.Sc./MA (1st yr completed). Specific CGPA.",
+    "eligibilityKeywords": ["undergraduate", "ug", "b.tech", "be", "b.arch", "bs", "3rd year completed", "postgraduate", "pg", "m.sc.", "ma", "1st year completed", "cgpa", "non-iitk"],
+    "generalRequiredDocumentsPast": "Online application, transcripts, SoP, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iitk.ac.in/program/surge"
+  },
+  {
+    "id": "iitm_sfp_2024",
+    "instituteName": "IIT Madras",
+    "programName": "Summer Fellowship Programme",
+    "locationCity": "Chennai",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "e.g., Rs. 6000/month",
+    "lastDateApplyIllustrative": "2024-03-31",
+    "lastDateDisplay": "Mar 31, 2024",
+    "eligibilityHighlightsPast": "Candidates pursuing 3rd Yr of B.E./B.Tech./B.Sc.(Engg)/Int. M.E./M.Tech; 1st Yr of M.E./M.Tech./M.Sc./M.A./MBA.",
+    "eligibilityKeywords": ["undergraduate", "ug", "3rd year", "b.e.", "b.tech", "b.sc. engg", "integrated m.e.", "integrated m.tech", "postgraduate", "pg", "1st year", "m.e.", "m.tech", "m.sc.", "m.a.", "mba"],
+    "generalRequiredDocumentsPast": "Online application, recommendation letter, transcripts.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iitm.ac.in/program/summer_fellowship"
+  },
+  {
+    "id": "iitr_spark_2024",
+    "instituteName": "IIT Roorkee",
+    "programName": "SPARK Program",
+    "locationCity": "Roorkee",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "e.g., Rs. 2500/week",
+    "lastDateApplyIllustrative": "2024-03-31",
+    "lastDateDisplay": "Mar 31, 2024",
+    "eligibilityHighlightsPast": "Students from specific institutes (list provided in notification), specific year/CGPA.",
+    "eligibilityKeywords": ["undergraduate", "ug", "postgraduate", "pg", "specific institutes", "specific year", "cgpa"],
+    "generalRequiredDocumentsPast": "Online application, transcripts, LoR, NOC.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iitr.ac.in/program/spark"
+  },
+  {
+    "id": "iitg_si_2024",
+    "instituteName": "IIT Guwahati",
+    "programName": "Summer Internship",
+    "locationCity": "Guwahati",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "some projects may offer",
+    "lastDateApplyIllustrative": "2024-03-15",
+    "lastDateDisplay": "Mar 15, 2024",
+    "eligibilityHighlightsPast": "Students from various UG/PG programs.",
+    "eligibilityKeywords": ["undergraduate", "ug", "postgraduate", "pg"],
+    "generalRequiredDocumentsPast": "Online application, consent from faculty.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iitg.ac.in/program/summer_internship"
+  },
+  {
+    "id": "iith_sure_2024",
+    "instituteName": "IIT Hyderabad",
+    "programName": "SURE Internships",
+    "locationCity": "Hyderabad",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "e.g., Rs. 15,000 for 2 months, if offline",
+    "lastDateApplyIllustrative": "2024-02-29",
+    "lastDateDisplay": "Feb 29, 2024",
+    "eligibilityHighlightsPast": "NON-IITH 1st yr MSc (Maths/Physics/Chem/Bio) or MA 1st Yr, 2nd/3rd Yr B.Tech/B.Des. Top 20% CGPA.",
+    "eligibilityKeywords": ["postgraduate", "pg", "1st year", "m.sc.", "maths", "physics", "chemistry", "biology", "ma", "undergraduate", "ug", "2nd year", "3rd year", "b.tech", "b.des", "top 20% cgpa", "non-iith"],
+    "generalRequiredDocumentsPast": "Online application, Bonafide with CGPA.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iith.ac.in/program/sure_internships"
+  },
+  {
+    "id": "iitgn_srip_2024",
+    "instituteName": "IIT Gandhinagar",
+    "programName": "Summer Research Internship Program (SRIP)",
+    "locationCity": "Gandhinagar",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "e.g., Rs. 2000/week",
+    "lastDateApplyIllustrative": "2024-03-05",
+    "lastDateDisplay": "Mar 5, 2024",
+    "eligibilityHighlightsPast": "Students pursuing a bachelor’s or master’s degree at a prominent institution in India.",
+    "eligibilityKeywords": ["undergraduate", "bachelor's", "postgraduate", "master's", "india"],
+    "generalRequiredDocumentsPast": "Online application, SoP, transcripts.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iitgn.ac.in/program/srip"
+  },
+  {
+    "id": "iitrpr_sip_2024",
+    "instituteName": "IIT Ropar",
+    "programName": "Summer Internship Program",
+    "locationCity": "Ropar",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "No",
+    "stipendDetails": "for 2024",
+    "lastDateApplyIllustrative": "2024-03-31",
+    "lastDateDisplay": "Mar 31, 2024",
+    "eligibilityHighlightsPast": "UG/PG students of Engg./Tech./Sci./Humanities & Mgmt. from recognized institutes.",
+    "eligibilityKeywords": ["undergraduate", "ug", "postgraduate", "pg", "engineering", "technology", "science", "humanities", "management"],
+    "generalRequiredDocumentsPast": "Online application, consent from faculty.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iitrpr.ac.in/program/summer_internship"
+  },
+  {
+    "id": "iitbbs_sip_2025",
+    "instituteName": "IIT Bhubaneswar",
+    "programName": "Summer Internship Program",
+    "locationCity": "Bhubaneswar",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "Supervisors may provide",
+    "lastDateApplyIllustrative": "2025-04-10",
+    "lastDateDisplay": "April 10, 2025",
+    "eligibilityHighlightsPast": "Students registered for a degree program.",
+    "eligibilityKeywords": ["degree program", "undergraduate", "postgraduate"],
+    "generalRequiredDocumentsPast": "Online application.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iitbbs.ac.in/program/summer_internship"
+  },
+  {
+    "id": "iiti_surp_2023",
+    "instituteName": "IIT Indore",
+    "programName": "IITI-SURP (Summer Undergraduate Research Programme)",
+    "locationCity": "Indore",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "e.g., Rs. 10,000 for 8 weeks",
+    "lastDateApplyIllustrative": "2023-03-20",
+    "lastDateDisplay": "Mar 20, 2023",
+    "eligibilityHighlightsPast": "Non-IIT Indore UG students who have completed at least 2 years of study.",
+    "eligibilityKeywords": ["undergraduate", "ug", "2 years completed", "non-iit indore"],
+    "generalRequiredDocumentsPast": "Online form, SoP, CV, transcript, LoR.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iiti.ac.in/program/surp"
+  },
+  {
+    "id": "iitpkd_sip_2024",
+    "instituteName": "IIT Palakkad",
+    "programName": "Summer Internship Program",
+    "locationCity": "Palakkad",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "No",
+    "stipendDetails": "for 2024",
+    "lastDateApplyIllustrative": "2024-04-10",
+    "lastDateDisplay": "Apr 10, 2024",
+    "eligibilityHighlightsPast": "Engineering/Science students in specific years (e.g., B.Tech 3rd yr, MSc 1st yr).",
+    "eligibilityKeywords": ["engineering", "science", "b.tech", "3rd year", "m.sc.", "1st year"],
+    "generalRequiredDocumentsPast": "Application form, NOC, ID proof.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iitpkd.ac.in/program/summer_internship"
+  },
+  {
+    "id": "iitism_si_varies",
+    "instituteName": "IIT (ISM) Dhanbad",
+    "programName": "Summer Internships",
+    "locationCity": "Dhanbad",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "some projects may offer",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Mar/Apr (check yearly)",
+    "eligibilityHighlightsPast": "UG/PG students.",
+    "eligibilityKeywords": ["undergraduate", "ug", "postgraduate", "pg"],
+    "generalRequiredDocumentsPast": "Application form, contact department/faculty.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iitism.ac.in/program/summer_internships"
+  },
+  {
+    "id": "iitgoa_sip_2024",
+    "instituteName": "IIT Goa",
+    "programName": "Summer Internship Program",
+    "locationCity": "Goa",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "Track A: Paid (Rs. 5000/month for 2024)",
+    "lastDateApplyIllustrative": "2024-04-15",
+    "lastDateDisplay": "Apr 15, 2024",
+    "eligibilityHighlightsPast": "Students in B.A., B.Sc., B.Tech., Dual Degrees, M.A., M.Sc., M.C.A. Not IIT Goa students.",
+    "eligibilityKeywords": ["b.a.", "b.sc.", "b.tech", "dual degree", "m.a.", "m.sc.", "m.c.a.", "non-iit goa"],
+    "generalRequiredDocumentsPast": "Online application, Bonafide certificate.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iitgoa.ac.in/program/summer_internship"
+  },
+  {
+    "id": "iitdh_sip_2025",
+    "instituteName": "IIT Dharwad",
+    "programName": "Summer Internship Program",
+    "locationCity": "Dharwad",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "No",
+    "stipendDetails": "Unpaid (for 2025)",
+    "lastDateApplyIllustrative": "2025-03-23",
+    "lastDateDisplay": "Mar 23, 2025",
+    "eligibilityHighlightsPast": "Enrolled UG/PG student in science, tech, engineering, math, etc. from an accredited Indian institute. Min. CGPA 6.5 or 65%.",
+    "eligibilityKeywords": ["undergraduate", "ug", "postgraduate", "pg", "science", "technology", "engineering", "math", "cgpa 6.5", "65%"],
+    "generalRequiredDocumentsPast": "Recent Photograph, Latest Resume, Latest Marksheet, Bonafide Certificate.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iitdh.ac.in/program/summer_internship"
+  },
+  {
+    "id": "nitw_sip_2024",
+    "instituteName": "NIT Warangal",
+    "programName": "Summer Internship Programme",
+    "locationCity": "Warangal",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "NITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "No",
+    "stipendDetails": "for 2024",
+    "lastDateApplyIllustrative": "2024-04-11",
+    "lastDateDisplay": "April 11, 2024",
+    "eligibilityHighlightsPast": "B.E./B.Tech/BSc (appeared at least 6th sem), M.Sc/MBA (appeared at least 2nd sem). Not for NITW students.",
+    "eligibilityKeywords": ["b.e.", "b.tech", "b.sc.", "6th sem", "m.sc.", "mba", "2nd sem", "non-nitw"],
+    "generalRequiredDocumentsPast": "Online application. All grade sheets.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.nitw.ac.in/program/summer_internship"
+  },
+  {
+    "id": "nitr_sip_2024",
+    "instituteName": "NIT Rourkela",
+    "programName": "Summer Internship Programme",
+    "locationCity": "Rourkela",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "NITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "No",
+    "stipendDetails": "for 2024",
+    "lastDateApplyIllustrative": "2024-04-07",
+    "lastDateDisplay": "April 7, 2024",
+    "eligibilityHighlightsPast": "B.Tech/B.Arch/Int. M.Sc./Dual Degree (appeared at least 4th/6th sem), MA/M.Sc./MBA (appeared at least 2nd sem). Not for NITR students.",
+    "eligibilityKeywords": ["b.tech", "b.arch", "int. m.sc.", "dual degree", "4th sem", "6th sem", "ma", "m.sc.", "mba", "2nd sem", "non-nitr"],
+    "generalRequiredDocumentsPast": "Online application. Grade sheets.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.nitrkl.ac.in/program/summer_internship"
+  },
+  {
+    "id": "nitt_si_varies",
+    "instituteName": "NIT Tiruchirappalli (NITT)",
+    "programName": "Summer Internship (contact depts)",
+    "locationCity": "Tiruchirappalli",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "NITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Check dept. websites (e.g., April/May)",
+    "eligibilityHighlightsPast": "Varies by department.",
+    "eligibilityKeywords": ["varies by department"],
+    "generalRequiredDocumentsPast": "Application form, letter from home institution.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.nitt.edu/program/summer_internship"
+  },
+  {
+    "id": "vnit_sri_2023",
+    "instituteName": "VNIT Nagpur",
+    "programName": "Summer Research Internship",
+    "locationCity": "Nagpur",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "NITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "No",
+    "stipendDetails": "for 2023",
+    "lastDateApplyIllustrative": "2023-05-15",
+    "lastDateDisplay": "May 15, 2023",
+    "eligibilityHighlightsPast": "Students pursuing B.Tech./B.E./M.Sc.",
+    "eligibilityKeywords": ["b.tech", "b.e.", "m.sc."],
+    "generalRequiredDocumentsPast": "Application form, Bonafide certificate.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.vnit.ac.in/program/summer_research_internship"
+  },
+  {
+    "id": "nits_snb_sip_2024",
+    "instituteName": "NIT Silchar",
+    "programName": "S. N. Bose Summer Internship Prog.",
+    "locationCity": "Silchar",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "NITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "No",
+    "stipendDetails": "for 2024",
+    "lastDateApplyIllustrative": "2024-04-15",
+    "lastDateDisplay": "April 15, 2024",
+    "eligibilityHighlightsPast": "1st yr M.Sc. (Phys, Chem, Math), 4th yr Int. M.Sc./BS-MS (Phys, Chem, Math), 3rd yr 4-yr B.S., 2nd yr 3-yr B.Sc. Min CPI 7.",
+    "eligibilityKeywords": ["1st year", "m.sc.", "physics", "chemistry", "math", "4th year", "int. m.sc.", "bs-ms", "3rd year", "b.s.", "2nd year", "b.sc.", "cpi 7"],
+    "generalRequiredDocumentsPast": "Application form, consent from NIT Silchar faculty.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.nits.ac.in/program/summer_internship"
+  },
+  {
+    "id": "nitrr_sio_2025",
+    "instituteName": "NIT Raipur",
+    "programName": "Summer Internship Opportunities",
+    "locationCity": "Raipur",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "NITs",
+    "modePast": "Offline",
+    "stipendPaidPast": "No",
+    "stipendDetails": "Unpaid (for 2025)",
+    "lastDateApplyIllustrative": "2025-04-09",
+    "lastDateDisplay": "April 09, 2025",
+    "eligibilityHighlightsPast": "Currently pursuing UG or PG programme at a recognized Institute/University.",
+    "eligibilityKeywords": ["undergraduate", "ug", "postgraduate", "pg"],
+    "generalRequiredDocumentsPast": "Application form, Aadhar card.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.nitrr.ac.in/program/summer_internship"
+  },
+  {
+    "id": "iiserp_ssp_2024",
+    "instituteName": "IISER Pune",
+    "programName": "Summer Student Programme (SSP)",
+    "locationCity": "Pune",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IISERs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "Some projects may offer; many unpaid",
+    "lastDateApplyIllustrative": "2024-03-24",
+    "lastDateDisplay": "Mar 24, 2024",
+    "eligibilityHighlightsPast": "2nd, 3rd, or 4th year B.Sc/B.Tech/B.E or equivalent; 1st year M.Sc/M.Tech or equivalent. Min 60% overall or 80% in stream of interest. Not for IISER Pune students.",
+    "eligibilityKeywords": ["2nd year", "3rd year", "4th year", "b.sc.", "b.tech", "b.e.", "1st year", "m.sc.", "m.tech", "60%", "80%", "non-iiser pune"],
+    "generalRequiredDocumentsPast": "Online registration, SoP, transcripts.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iiserpune.ac.in/program/ssp"
+  },
+  {
+    "id": "iiserk_srp_2024",
+    "instituteName": "IISER Kolkata",
+    "programName": "Summer Research Programme",
+    "locationCity": "Kolkata",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IISERs",
+    "modePast": "Offline",
+    "stipendPaidPast": "No",
+    "stipendDetails": "Unpaid (for 2024)",
+    "lastDateApplyIllustrative": "2024-04-09",
+    "lastDateDisplay": "April 9, 2024",
+    "eligibilityHighlightsPast": "B.Sc., M.Sc., B.S., M.S., B.Tech., B.E. students.",
+    "eligibilityKeywords": ["b.sc.", "m.sc.", "b.s.", "m.s.", "b.tech", "b.e."],
+    "generalRequiredDocumentsPast": "Online application. Project report upon completion.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iiserkol.ac.in/program/summer_research"
+  },
+  {
+    "id": "iiserm_srp_2024",
+    "instituteName": "IISER Mohali",
+    "programName": "Summer Research Program",
+    "locationCity": "Mohali",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IISERs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "Some may be paid",
+    "lastDateApplyIllustrative": "2024-03-28",
+    "lastDateDisplay": "Mar 28, 2024",
+    "eligibilityHighlightsPast": "BSc (2nd/3rd Year), MSc (1st Year) or equivalent.",
+    "eligibilityKeywords": ["b.sc.", "2nd year", "3rd year", "m.sc.", "1st year"],
+    "generalRequiredDocumentsPast": "Online form.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iisermohali.ac.in/program/summer_research"
+  },
+  {
+    "id": "iiserb_srip_2023",
+    "instituteName": "IISER Bhopal",
+    "programName": "Summer Research Internship Program",
+    "locationCity": "Bhopal",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IISERs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "e.g., Rs. 5000/month for 2023",
+    "lastDateApplyIllustrative": "2023-03-31",
+    "lastDateDisplay": "Mar 31, 2023",
+    "eligibilityHighlightsPast": "Students in specific years of UG/PG programs in Science/Engineering.",
+    "eligibilityKeywords": ["undergraduate", "ug", "postgraduate", "pg", "science", "engineering"],
+    "generalRequiredDocumentsPast": "Online application, SoP, LoR.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iiserb.ac.in/program/summer_internship"
+  },
+  {
+    "id": "iisertvm_svp_varies",
+    "instituteName": "IISER Thiruvananthapuram",
+    "programName": "Summer Visiting Programme (SVP)",
+    "locationCity": "Thiruvananthapuram",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "IISERs",
+    "modePast": "Offline",
+    "stipendPaidPast": "No",
+    "stipendDetails": "for 2024",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Contact PIs directly (rolling)",
+    "eligibilityHighlightsPast": "Bachelor's and Master's students with good academic record.",
+    "eligibilityKeywords": ["bachelor's", "master's", "good academic record"],
+    "generalRequiredDocumentsPast": "CV, research proposal, letter from HoD.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iisertvm.ac.in/program/svp"
+  },
+  {
+    "id": "iiscb_sf_varies",
+    "instituteName": "IISc Bangalore",
+    "programName": "Summer Fellowships (various depts)",
+    "locationCity": "Bangalore",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "varies by dept",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies by dept (e.g., Jan-Mar)",
+    "eligibilityHighlightsPast": "UG/PG students, specific criteria per department.",
+    "eligibilityKeywords": ["undergraduate", "ug", "postgraduate", "pg", "varies by department"],
+    "generalRequiredDocumentsPast": "Online application, SoP, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iisc.ac.in/program/summer_fellowships"
+  },
+  {
+    "id": "tifrm_vsrp_2024",
+    "instituteName": "TIFR Mumbai",
+    "programName": "Visiting Students' Research Programme (VSRP)",
+    "locationCity": "Mumbai",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "monthly fellowship + travel",
+    "lastDateApplyIllustrative": "2024-01-31",
+    "lastDateDisplay": "Jan 31, 2024",
+    "eligibilityHighlightsPast": "Pre-final yr B.Sc./M.Sc. (Physics, Astronomy, etc.)",
+    "eligibilityKeywords": ["pre-final year", "b.sc.", "m.sc.", "physics", "astronomy"],
+    "generalRequiredDocumentsPast": "Online application, academic records, referee reports.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.tifr.res.in/program/vsrp"
+  },
+  {
+    "id": "ictstifr_bhatt_varies",
+    "instituteName": "ICTS-TIFR Bangalore",
+    "programName": "S.N. Bhatt Memorial Excellence Fellowship / Various Summer Schools",
+    "locationCity": "Bangalore",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "fellowship, travel for schools",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies (e.g., Bhatt: Jan 31; Schools: Feb/Mar)",
+    "eligibilityHighlightsPast": "Bhatt: UG/Masters students. Schools: MSc, PhD students (varies).",
+    "eligibilityKeywords": ["undergraduate", "ug", "master's", "m.sc.", "phd"],
+    "generalRequiredDocumentsPast": "Online application, CV, SoP, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.icts.res.in/program/fellowships_schools"
+  },
+  {
+    "id": "ncratifr_sp_2024",
+    "instituteName": "NCRA-TIFR Pune",
+    "programName": "Summer Programme",
+    "locationCity": "Pune",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "",
+    "lastDateApplyIllustrative": "2024-02-29",
+    "lastDateDisplay": "Feb 29, 2024",
+    "eligibilityHighlightsPast": "Students in 2nd/3rd yr B.Sc (Physics/Astronomy), 3rd/4th yr B.E/B.Tech (Electronics/CS), 1st yr M.Sc (Physics/Astronomy), Int. M.Sc 3rd/4th yr.",
+    "eligibilityKeywords": ["2nd year", "3rd year", "b.sc.", "physics", "astronomy", "3rd year", "4th year", "b.e.", "b.tech", "electronics", "cs", "1st year", "m.sc.", "int. m.sc."],
+    "generalRequiredDocumentsPast": "Online application, LoR.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.ncra.tifr.res.in/program/summer_programme"
+  },
+  {
+    "id": "hbcsetifr_nius_prev_yr",
+    "instituteName": "HBCSE-TIFR Mumbai",
+    "programName": "NIUS (National Initiative on Undergraduate Science) - Physics",
+    "locationCity": "Mumbai",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "Travel, accommodation, per diem",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Aug/Sep of previous year",
+    "eligibilityHighlightsPast": "Typically 1st year UG (BSc/Integrated MSc) students.",
+    "eligibilityKeywords": ["1st year", "undergraduate", "ug", "b.sc.", "integrated m.sc."],
+    "generalRequiredDocumentsPast": "Online application, essay, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.hbcse.tifr.res.in/program/nius_physics"
+  },
+  {
+    "id": "barc_sp_varies",
+    "instituteName": "BARC Mumbai",
+    "programName": "Summer Projects (often via KVPY/Academies)",
+    "locationCity": "Mumbai",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Check specific schemes",
+    "eligibilityHighlightsPast": "Varies by scheme (e.g., KVPY fellows).",
+    "eligibilityKeywords": ["varies by scheme", "kvpy"],
+    "generalRequiredDocumentsPast": "As per scheme.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.barc.gov.in/program/summer_projects"
+  },
+  {
+    "id": "rrcat_ssp_2023",
+    "instituteName": "RRCAT Indore",
+    "programName": "Summer Student Programme",
+    "locationCity": "Indore",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, accommodation",
+    "lastDateApplyIllustrative": "2023-03-15",
+    "lastDateDisplay": "Mar 15, 2023",
+    "eligibilityHighlightsPast": "M.Sc. (Physics) 1st yr, B.E./B.Tech. (specified branches) 3rd yr.",
+    "eligibilityKeywords": ["m.sc.", "physics", "1st year", "b.e.", "b.tech", "3rd year"],
+    "generalRequiredDocumentsPast": "Online application, transcripts.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.rrcat.gov.in/program/summer_student_programme"
+  },
+  {
+    "id": "iopb_ssvp_2024",
+    "instituteName": "IOP Bhubaneswar",
+    "programName": "Summer Students' Visiting Programme (SSVP)",
+    "locationCity": "Bhubaneswar",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend + travel",
+    "lastDateApplyIllustrative": "2024-03-21",
+    "lastDateDisplay": "Mar 21, 2024",
+    "eligibilityHighlightsPast": "Students completing 1st year of 2-year M.Sc. or 4th year of 5-year Integrated M.Sc. in Physics in 2025.",
+    "eligibilityKeywords": ["1st year m.sc.", "4th year int. m.sc.", "physics", "2025 completion"],
+    "generalRequiredDocumentsPast": "CV, Choice of research area.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iopb.res.in/program/ssvp"
+  },
+  {
+    "id": "iprg_ssp_2024",
+    "instituteName": "IPR Gandhinagar",
+    "programName": "Summer School Program",
+    "locationCity": "Gandhinagar",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, travel, accommodation",
+    "lastDateApplyIllustrative": "2024-01-12",
+    "lastDateDisplay": "Jan 12, 2024",
+    "eligibilityHighlightsPast": "Students completing M.Sc. (Physics) 1st year or B.E./B.Tech. (Physics/Engg. Physics/ Mech./ Elec.) 3rd year.",
+    "eligibilityKeywords": ["m.sc. physics", "1st year", "b.e.", "b.tech", "physics", "engg. physics", "mechanical", "electrical", "3rd year"],
+    "generalRequiredDocumentsPast": "Online application, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.ipr.res.in/program/summer_school"
+  },
+  {
+    "id": "niserb_spp_varies",
+    "instituteName": "NISER Bhubaneswar",
+    "programName": "Summer Project Program",
+    "locationCity": "Bhubaneswar",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "some may offer",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Mar/Apr",
+    "eligibilityHighlightsPast": "UG/PG students.",
+    "eligibilityKeywords": ["undergraduate", "ug", "postgraduate", "pg"],
+    "generalRequiredDocumentsPast": "Application to specific faculty.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.niser.ac.in/program/summer_project"
+  },
+  {
+    "id": "hria_vsp_varies",
+    "instituteName": "HRI Allahabad",
+    "programName": "Visiting Students Program (Physics)",
+    "locationCity": "Allahabad",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, accommodation",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Year-round (apply well in advance)",
+    "eligibilityHighlightsPast": "M.Sc. students (completed 1st yr), exceptional B.Sc. final yr.",
+    "eligibilityKeywords": ["m.sc.", "1st year completed", "b.sc.", "final year", "physics"],
+    "generalRequiredDocumentsPast": "Application form, CV, SoP, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.hri.res.in/program/visiting_students_physics"
+  },
+  {
+    "id": "sinpk_ssp_2024",
+    "instituteName": "SINP Kolkata",
+    "programName": "Summer Students' Programme",
+    "locationCity": "Kolkata",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, accommodation",
+    "lastDateApplyIllustrative": "2024-02-28",
+    "lastDateDisplay": "Feb 28, 2024",
+    "eligibilityHighlightsPast": "1st yr M.Sc. or equivalent, B.Tech (3rd yr completed), Int. M.Sc. (BS-MS) (3 yrs completed).",
+    "eligibilityKeywords": ["1st year", "m.sc.", "b.tech", "3rd year completed", "int. m.sc.", "bs-ms", "3 years completed"],
+    "generalRequiredDocumentsPast": "Academic record, Recommendation letters.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.saha.ac.in/program/summer_students"
+  },
+  {
+    "id": "imsc_srp_2024",
+    "instituteName": "IMSc Chennai",
+    "programName": "Summer Research Program",
+    "locationCity": "Chennai",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, travel",
+    "lastDateApplyIllustrative": "2024-02-15",
+    "lastDateDisplay": "Feb 15, 2024",
+    "eligibilityHighlightsPast": "Pre-final/final year UG, pre-final/final year PG in relevant disciplines.",
+    "eligibilityKeywords": ["pre-final year", "final year", "undergraduate", "ug", "postgraduate", "pg"],
+    "generalRequiredDocumentsPast": "Online application, SoP, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.imsc.res.in/program/summer_research"
+  },
+  {
+    "id": "csirnpl_srtp_varies",
+    "instituteName": "CSIR-NPL New Delhi",
+    "programName": "Summer Research Training Program / CSIR CPYLS (check for current status)",
+    "locationCity": "New Delhi",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Check NPL/CSIR HRDG website (e.g., Apr/May)",
+    "eligibilityHighlightsPast": "Varies by program (e.g., UG/PG students in Science/Engineering).",
+    "eligibilityKeywords": ["undergraduate", "ug", "postgraduate", "pg", "science", "engineering"],
+    "generalRequiredDocumentsPast": "Application form, institutional nomination.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.nplindia.org/program/summer_research"
+  },
+  {
+    "id": "prla_sip_2024",
+    "instituteName": "PRL Ahmedabad",
+    "programName": "Summer Internship Programme (SIP)",
+    "locationCity": "Ahmedabad",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Hybrid",
+    "stipendPaidPast": "No",
+    "stipendDetails": "Unpaid (2024)",
+    "lastDateApplyIllustrative": "2024-04-20",
+    "lastDateDisplay": "April 20, 2024",
+    "eligibilityHighlightsPast": "Indian students in B.Sc. (Physics) final year, M.Sc. (Physics/Applied Physics/Astronomy/Optics/Laser Physics) 1st/2nd year, or Int. M.Sc. 4th/5th year with min 60% marks.",
+    "eligibilityKeywords": ["indian", "b.sc. physics", "final year", "m.sc.", "physics", "applied physics", "astronomy", "optics", "laser physics", "1st year", "2nd year", "int. m.sc.", "4th year", "5th year", "60%"],
+    "generalRequiredDocumentsPast": "Online application, Bonafide, LoR, Consent from PRL supervisor.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.prl.res.in/program/sip"
+  },
+  {
+    "id": "iistt_sip_2024",
+    "instituteName": "IIST Thiruvananthapuram",
+    "programName": "Summer Internship Programme",
+    "locationCity": "Thiruvananthapuram",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "No",
+    "stipendDetails": "Unpaid (2024)",
+    "lastDateApplyIllustrative": "2024-04-21",
+    "lastDateDisplay": "April 21, 2024",
+    "eligibilityHighlightsPast": "B.Tech/BE, BS-MS, MSc, or equivalent students (specific years/batches). Min 70% or equivalent GPA. Indian nationals.",
+    "eligibilityKeywords": ["b.tech", "b.e.", "bs-ms", "m.sc.", "70%", "gpa", "indian"],
+    "generalRequiredDocumentsPast": "Online application, resume, documents as per portal.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iist.ac.in/program/summer_internship"
+  },
+  {
+    "id": "jncasr_srfp_2023",
+    "instituteName": "JNCASR Bangalore",
+    "programName": "Summer Research Fellowship Programme (SRFP)",
+    "locationCity": "Bangalore",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "fellowship",
+    "lastDateApplyIllustrative": "2023-11-30",
+    "lastDateDisplay": "Nov 30, 2023 (for 2024)",
+    "eligibilityHighlightsPast": "UG/PG in Science/Engg/Tech/Med/Vet. Sci. Min 65% in 10th/12th & 1st class. Specific year criteria for Physical Sciences (e.g., BSc 2nd/3rd yr, BS-MS 2nd/3rd/4th yr, MSc 1st yr).",
+    "eligibilityKeywords": ["undergraduate", "ug", "postgraduate", "pg", "science", "engineering", "technology", "medical", "veterinary science", "65%", "b.sc.", "2nd year", "3rd year", "bs-ms", "4th year", "m.sc.", "1st year"],
+    "generalRequiredDocumentsPast": "Online application.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.jncasr.ac.in/program/srfp"
+  },
+  {
+    "id": "academies_srfp_2023",
+    "instituteName": "Science Academies (IASc, INSA, NASI)",
+    "programName": "Summer Research Fellowship Programme",
+    "locationCity": "Various India",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "Other Premier Indian Institutions",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "fellowship, travel",
+    "lastDateApplyIllustrative": "2023-11-20",
+    "lastDateDisplay": "Nov 20, 2023 (for 2024)",
+    "eligibilityHighlightsPast": "UG/PG students in specific years of study, specific CGPA/percentage.",
+    "eligibilityKeywords": ["undergraduate", "ug", "postgraduate", "pg", "specific year", "cgpa", "percentage"],
+    "generalRequiredDocumentsPast": "Online application, SoP, transcripts, LoR.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.ias.ac.in/program/summer_research_fellowship"
+  },
+  {
+    "id": "iiab_sp_vsp_2024",
+    "instituteName": "Indian Institute of Astrophysics (IIA), Bangalore",
+    "programName": "Summer Programme / Visiting Student Programmes",
+    "locationCity": "Bangalore",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "More Major National Indian Universities/Institutes & Specific Programs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, travel, accommodation",
+    "lastDateApplyIllustrative": "2024-03-15",
+    "lastDateDisplay": "Mar 15, 2024 (for Summer Programme)",
+    "eligibilityHighlightsPast": "B.Sc (Physics) 2nd/3rd yr, M.Sc (Physics/Applied Physics) 1st yr, B.E./B.Tech (relevant branches) 3rd/4th yr.",
+    "eligibilityKeywords": ["b.sc. physics", "2nd year", "3rd year", "m.sc. physics", "m.sc. applied physics", "1st year", "b.e.", "b.tech", "4th year"],
+    "generalRequiredDocumentsPast": "Online application, SoP, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iiap.res.in/program/summer_visiting_student"
+  },
+  {
+    "id": "rrib_vsp_varies",
+    "instituteName": "Raman Research Institute (RRI), Bangalore",
+    "programName": "Visiting Students' Program (often year-round, check for summer focus)",
+    "locationCity": "Bangalore",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "More Major National Indian Universities/Institutes & Specific Programs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "fellowship",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Apply at least 2 months in advance",
+    "eligibilityHighlightsPast": "MSc students, exceptional UG students.",
+    "eligibilityKeywords": ["m.sc.", "undergraduate", "ug"],
+    "generalRequiredDocumentsPast": "Application form, CV, SoP, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.rri.res.in/program/visiting_students"
+  },
+  {
+    "id": "snbncbsk_srp_2024",
+    "instituteName": "S.N. Bose National Centre for Basic Sciences, Kolkata",
+    "programName": "Summer Research Programme",
+    "locationCity": "Kolkata",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "More Major National Indian Universities/Institutes & Specific Programs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "fellowship, accommodation",
+    "lastDateApplyIllustrative": "2024-03-31",
+    "lastDateDisplay": "Mar 31, 2024",
+    "eligibilityHighlightsPast": "Students pursuing M.Sc./Int. M.Sc. (Physics, Chemistry, Biology) in 1st/2nd year.",
+    "eligibilityKeywords": ["m.sc.", "int. m.sc.", "physics", "chemistry", "biology", "1st year", "2nd year"],
+    "generalRequiredDocumentsPast": "Online application, SoP, transcripts, LoR.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.bose.res.in/program/summer_research"
+  },
+  {
+    "id": "ariesn_ss_pt_varies",
+    "instituteName": "Aryabhatta Research Institute of Observational Sciences (ARIES)",
+    "programName": "Summer Schools / Project Training",
+    "locationCity": "Nainital",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "More Major National Indian Universities/Institutes & Specific Programs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "some schools offer support",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies (e.g., School: Mar/Apr; Projects: contact faculty)",
+    "eligibilityHighlightsPast": "Schools: MSc (Physics) 1st yr. Projects: MSc/B.Tech students.",
+    "eligibilityKeywords": ["m.sc. physics", "1st year", "b.tech"],
+    "generalRequiredDocumentsPast": "Online application for schools. For projects: CV, letter to faculty.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.aries.res.in/program/summer_schools_projects"
+  },
+  {
+    "id": "iucaap_ss_vsp_2024",
+    "instituteName": "Inter-University Centre for Astronomy and Astrophysics (IUCAA)",
+    "programName": "Summer School in Astronomy and Astrophysics / Vacation Students' Programme (VSP)",
+    "locationCity": "Pune",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "More Major National Indian Universities/Institutes & Specific Programs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "travel, accommodation, stipend",
+    "lastDateApplyIllustrative": "2024-01-15",
+    "lastDateDisplay": "Jan 15, 2024 (for VSP)",
+    "eligibilityHighlightsPast": "VSP: Students in 3rd yr BSc (Physics/Astronomy/Applied Math/Electronics) or 3rd/4th yr BE/BTech. Schools: Often MSc 1st yr.",
+    "eligibilityKeywords": ["3rd year", "b.sc.", "physics", "astronomy", "applied math", "electronics", "4th year", "b.e.", "b.tech", "m.sc.", "1st year"],
+    "generalRequiredDocumentsPast": "Online application, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iucaa.in/program/summer_school_vsp"
+  },
+  {
+    "id": "instm_ip_varies",
+    "instituteName": "Institute of Nano Science and Technology (INST), Mohali",
+    "programName": "Internship Programme",
+    "locationCity": "Mohali",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "More Major National Indian Universities/Institutes & Specific Programs",
+    "modePast": "Offline",
+    "stipendPaidPast": "No",
+    "stipendDetails": "Unpaid (application fee may apply)",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Apply 1 month before desired start",
+    "eligibilityHighlightsPast": "3rd yr B.Sc, 3rd/4th yr B.Tech, 1st/2nd yr M.Sc/M.Tech, 3rd/4th/5th yr BS-MS. Min 2 months.",
+    "eligibilityKeywords": ["3rd year", "b.sc.", "4th year", "b.tech", "1st year", "2nd year", "m.sc.", "m.tech", "5th year", "bs-ms", "2 months"],
+    "generalRequiredDocumentsPast": "Cover letter, CV to faculty, certificates.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.inst.ac.in/program/internship"
+  },
+  {
+    "id": "uohydsp_srp_varies",
+    "instituteName": "University of Hyderabad, School of Physics",
+    "programName": "Summer Research Program (often informal, contact faculty)",
+    "locationCity": "Hyderabad",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "More Major National Indian Universities/Institutes & Specific Programs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Contact faculty well in advance",
+    "eligibilityHighlightsPast": "MSc students, advanced BSc students.",
+    "eligibilityKeywords": ["m.sc.", "advanced b.sc."],
+    "generalRequiredDocumentsPast": "CV, email to faculty.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://physics.uohyd.ac.in/program/summer_research"
+  },
+  {
+    "id": "jnusps_sr_varies",
+    "instituteName": "Jawaharlal Nehru University (JNU), School of Physical Sciences",
+    "programName": "Summer Research (informal, contact faculty)",
+    "locationCity": "New Delhi",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "More Major National Indian Universities/Institutes & Specific Programs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Contact faculty well in advance",
+    "eligibilityHighlightsPast": "MSc students, advanced BSc students.",
+    "eligibilityKeywords": ["m.sc.", "advanced b.sc."],
+    "generalRequiredDocumentsPast": "CV, email to faculty.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.jnu.ac.in/sps/program/summer_research"
+  },
+  {
+    "id": "prla_cssteap_scspps_2024",
+    "instituteName": "Physical Research Laboratory (PRL), Ahmedabad",
+    "programName": "Short Course on Solar Physics & Planetary Science (CSSTEAP hosted at PRL)",
+    "locationCity": "Ahmedabad",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "More Major National Indian Universities/Institutes & Specific Programs",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "---",
+    "lastDateApplyIllustrative": "2024-03-31",
+    "lastDateDisplay": "March 31, 2024",
+    "eligibilityHighlightsPast": "Master's in Physics, Math or B.E./B.Tech in relevant Engg. fields. English proficiency.",
+    "eligibilityKeywords": ["master's", "physics", "math", "b.e.", "b.tech", "engineering", "english proficiency"],
+    "generalRequiredDocumentsPast": "Online application.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.prl.res.in/cssteap/short_course"
+  },
+  {
+    "id": "vssct_isp_varies",
+    "instituteName": "Vikram Sarabhai Space Centre (VSSC), Thiruvananthapuram",
+    "programName": "Internship & Student Project Trainee Schemes",
+    "locationCity": "Thiruvananthapuram",
+    "locationCountry": "India",
+    "region": "India",
+    "category": "More Major National Indian Universities/Institutes & Specific Programs",
+    "modePast": "Offline",
+    "stipendPaidPast": "No",
+    "stipendDetails": "Unpaid",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Apply at least 1 month before start",
+    "eligibilityHighlightsPast": "UG/PG/PhD students (Indian citizen) in Science/Technology, or completed within 6 months. Min 60% or CGPA 6.32.",
+    "eligibilityKeywords": ["undergraduate", "ug", "postgraduate", "pg", "phd", "indian citizen", "science", "technology", "60%", "cgpa 6.32"],
+    "generalRequiredDocumentsPast": "Application form, Bio-data, Bonafide certificate.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.vssc.gov.in/program/internships"
+  },
+  {
+    "id": "nsf_reu_varies",
+    "instituteName": "National Science Foundation (NSF) REU Sites",
+    "programName": "Research Experiences for Undergraduates (at various universities)",
+    "locationCity": "Various USA",
+    "locationCountry": "USA",
+    "region": "North America (USA & Canada)",
+    "category": "North America",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, often housing/travel",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies by site (typically Dec-Mar)",
+    "eligibilityHighlightsPast": "US citizens/permanent residents. Enrolled UG students. Specific criteria by site.",
+    "eligibilityKeywords": ["us citizen", "permanent resident", "undergraduate", "ug"],
+    "generalRequiredDocumentsPast": "Online application, transcripts, LoRs, personal statement (varies by site).",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.nsf.gov/crssprgm/reu/"
+  },
+  {
+    "id": "doe_suli_2024",
+    "instituteName": "Department of Energy (DOE) SULI Program",
+    "programName": "Science Undergraduate Laboratory Internships (at various National Labs)",
+    "locationCity": "Various USA",
+    "locationCountry": "USA",
+    "region": "North America (USA & Canada)",
+    "category": "North America",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, housing/travel allowance",
+    "lastDateApplyIllustrative": "2024-01-09",
+    "lastDateDisplay": "Jan 9, 2024 (for Summer Term)",
+    "eligibilityHighlightsPast": "US citizens/LPRs. Enrolled full-time UG student or recent grad. Min GPA 3.0. Specific coursework.",
+    "eligibilityKeywords": ["us citizen", "lpr", "undergraduate", "ug", "recent graduate", "gpa 3.0"],
+    "generalRequiredDocumentsPast": "Online application (DOE WDTS), transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://science.osti.gov/wdts/suli"
+  },
+  {
+    "id": "fermilab_si_varies",
+    "instituteName": "Fermilab, USA",
+    "programName": "Summer Internships (SULI, specific international programs)",
+    "locationCity": "Batavia, IL",
+    "locationCountry": "USA",
+    "region": "North America (USA & Canada)",
+    "category": "North America",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies (e.g., SULI: Jan)",
+    "eligibilityHighlightsPast": "Varies by program. SULI: US citizens/LPRs. International programs for specific nationalities (e.g., Italian students).",
+    "eligibilityKeywords": ["suli", "us citizen", "lpr", "international", "italian students"],
+    "generalRequiredDocumentsPast": "Online application, transcripts, LoRs, essays.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://internships.fnal.gov/"
+  },
+  {
+    "id": "slac_si_varies",
+    "instituteName": "SLAC National Accelerator Laboratory",
+    "programName": "Summer Internships (SULI, other programs)",
+    "locationCity": "Menlo Park, CA",
+    "locationCountry": "USA",
+    "region": "North America (USA & Canada)",
+    "category": "North America",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies (e.g., SULI: Jan)",
+    "eligibilityHighlightsPast": "Varies. SULI criteria apply. Other programs may exist for international students.",
+    "eligibilityKeywords": ["suli", "international students"],
+    "generalRequiredDocumentsPast": "Online application, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www6.slac.stanford.edu/careers/internships"
+  },
+  {
+    "id": "bnl_sp_varies",
+    "instituteName": "Brookhaven National Laboratory (BNL)",
+    "programName": "Summer Programs (SULI, others)",
+    "locationCity": "Upton, NY",
+    "locationCountry": "USA",
+    "region": "North America (USA & Canada)",
+    "category": "North America",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies (e.g., SULI: Jan)",
+    "eligibilityHighlightsPast": "Varies. SULI criteria apply.",
+    "eligibilityKeywords": ["suli"],
+    "generalRequiredDocumentsPast": "Online application, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.bnl.gov/education/programs/"
+  },
+  {
+    "id": "lanl_sp_ss_varies",
+    "instituteName": "Los Alamos National Laboratory (LANL)",
+    "programName": "Student Programs / Summer Schools",
+    "locationCity": "Los Alamos, NM",
+    "locationCountry": "USA",
+    "region": "North America (USA & Canada)",
+    "category": "North America",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies (e.g., UG programs: Mar/Apr)",
+    "eligibilityHighlightsPast": "US citizens generally. Specific GPA/coursework. Summer schools have varying eligibility (UG to Grad).",
+    "eligibilityKeywords": ["us citizen", "gpa", "undergraduate", "ug", "graduate"],
+    "generalRequiredDocumentsPast": "Online application, CV, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.lanl.gov/careers/student-programs/"
+  },
+  {
+    "id": "nasa_si_varies",
+    "instituteName": "NASA (various centers like JPL, Goddard)",
+    "programName": "Summer Internships (check NASA OSSI - now NASA Internships)",
+    "locationCity": "Various USA",
+    "locationCountry": "USA",
+    "region": "North America (USA & Canada)",
+    "category": "North America",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Early Mar (for Summer)",
+    "eligibilityHighlightsPast": "US citizens generally (some limited opportunities for foreign nationals via specific programs like NASA I^2). Min GPA 3.0. UG/Grad students.",
+    "eligibilityKeywords": ["us citizen", "foreign nationals", "nasa i^2", "gpa 3.0", "undergraduate", "ug", "graduate"],
+    "generalRequiredDocumentsPast": "Online application (NASA Internships portal), resume, transcripts, LoRs may be needed.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://intern.nasa.gov/"
+  },
+  {
+    "id": "caltech_surf_2024",
+    "instituteName": "Caltech",
+    "programName": "SURF (Summer Undergraduate Research Fellowships)",
+    "locationCity": "Pasadena, CA",
+    "locationCountry": "USA",
+    "region": "North America (USA & Canada)",
+    "category": "North America",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "e.g., $7,140 for 10 weeks in 2024",
+    "lastDateApplyIllustrative": "2024-02-22",
+    "lastDateDisplay": "Feb 22, 2024",
+    "eligibilityHighlightsPast": "UG students with min 2.5 GPA. Open to Caltech & non-Caltech students (incl. international if they can secure own visa & funding, or if Caltech project has international funding). Finding a mentor is key.",
+    "eligibilityKeywords": ["undergraduate", "ug", "gpa 2.5", "caltech", "non-caltech", "international", "visa", "funding"],
+    "generalRequiredDocumentsPast": "Online application, proposal, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://sfp.caltech.edu/surf"
+  },
+  {
+    "id": "stanfordphy_srp_varies",
+    "instituteName": "Stanford University Physics Dept.",
+    "programName": "Summer Research Programs / Individual Faculty projects (SPINWIP for high school women)",
+    "locationCity": "Stanford, CA",
+    "locationCountry": "USA",
+    "region": "North America (USA & Canada)",
+    "category": "North America",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "some paid",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies (check dept., REU sites)",
+    "eligibilityHighlightsPast": "UG students. SPINWIP for high school. Eligibility varies.",
+    "eligibilityKeywords": ["undergraduate", "ug", "spinwip", "high school"],
+    "generalRequiredDocumentsPast": "Varies.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://physics.stanford.edu/research/summer-research"
+  },
+  {
+    "id": "harvardphy_reu_varies",
+    "instituteName": "Harvard University Physics Dept.",
+    "programName": "REU Program / Summer Research (check dept.)",
+    "locationCity": "Cambridge, MA",
+    "locationCountry": "USA",
+    "region": "North America (USA & Canada)",
+    "category": "North America",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "REU stipend",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Mid-Feb (for REU)",
+    "eligibilityHighlightsPast": "REU: US citizens/PRs. Other opportunities: check eligibility.",
+    "eligibilityKeywords": ["reu", "us citizen", "pr"],
+    "generalRequiredDocumentsPast": "REU: Online application, SoP, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://physics.harvard.edu/reu"
+  },
+  {
+    "id": "mitphy_urop_sp_varies",
+    "instituteName": "MIT Physics Dept.",
+    "programName": "UROP (Undergraduate Research Opportunities Program) / Summer programs",
+    "locationCity": "Cambridge, MA",
+    "locationCountry": "USA",
+    "region": "North America (USA & Canada)",
+    "category": "North America",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend or academic credit",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies (UROP is ongoing)",
+    "eligibilityHighlightsPast": "MIT students for UROP. Summer programs may have wider eligibility.",
+    "eligibilityKeywords": ["urop", "mit students", "summer programs"],
+    "generalRequiredDocumentsPast": "UROP: Proposal with faculty supervisor. Summer programs: Varies.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://physics.mit.edu/research/urop-summer-programs/"
+  },
+  {
+    "id": "stsci_ssp_2024",
+    "instituteName": "Space Telescope Science Institute (STScI)",
+    "programName": "Summer Student Program",
+    "locationCity": "Baltimore, MD",
+    "locationCountry": "USA",
+    "region": "North America (USA & Canada)",
+    "category": "North America",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, travel, housing aid",
+    "lastDateApplyIllustrative": "2024-01-31",
+    "lastDateDisplay": "Jan 31, 2024",
+    "eligibilityHighlightsPast": "College undergraduates (from sophomore to senior year) and early graduate students. All majors.",
+    "eligibilityKeywords": ["undergraduate", "sophomore", "junior", "senior", "early graduate", "all majors"],
+    "generalRequiredDocumentsPast": "Online application, CV, transcripts, SoP, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.stsci.edu/opportunities/summer-student-program"
+  },
+  {
+    "id": "triumf_ssp_2024",
+    "instituteName": "TRIUMF, Canada",
+    "programName": "Summer Student Programs (Research Award, Fellowship)",
+    "locationCity": "Vancouver, BC",
+    "locationCountry": "Canada",
+    "region": "North America (USA & Canada)",
+    "category": "North America",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend",
+    "lastDateApplyIllustrative": "2024-01-19",
+    "lastDateDisplay": "Jan/Feb (e.g., Research Award: Jan 19, 2024)",
+    "eligibilityHighlightsPast": "UG students in Physics, Engg, CS. Specific year requirements. Canadian citizens/PRs for some awards; some open to international.",
+    "eligibilityKeywords": ["undergraduate", "ug", "physics", "engineering", "cs", "canadian citizen", "pr", "international"],
+    "generalRequiredDocumentsPast": "Online application, transcripts, LoRs, statement.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.triumf.ca/careers/summer-student-programs"
+  },
+  {
+    "id": "uwaterlooiqc_useqip_ra_varies",
+    "instituteName": "University of Waterloo, Institute for Quantum Computing (IQC)",
+    "programName": "USEQIP (Undergraduate School on Experimental Quantum Information Processing) / Research Awards",
+    "locationCity": "Waterloo, ON",
+    "locationCountry": "Canada",
+    "region": "North America (USA & Canada)",
+    "category": "North America",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend for research awards",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "USEQIP: Mid-Feb. Research: Varies.",
+    "eligibilityHighlightsPast": "USEQIP: 3rd/4th yr UG in STEM. Research Awards: UG students.",
+    "eligibilityKeywords": ["useqip", "3rd year", "4th year", "undergraduate", "ug", "stem", "research awards"],
+    "generalRequiredDocumentsPast": "Online application, transcripts, LoRs, SoP.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://uwaterloo.ca/institute-for-quantum-computing/programs"
+  },
+  {
+    "id": "perimeter_psi_start_2024",
+    "instituteName": "Perimeter Institute, Canada",
+    "programName": "PSI Start Program (Online School + Internship)",
+    "locationCity": "Waterloo, Canada (Internship)",
+    "locationCountry": "Canada",
+    "region": "North America (USA & Canada)",
+    "category": "North America",
+    "modePast": "Hybrid",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "for internship",
+    "lastDateApplyIllustrative": "2024-01-22",
+    "lastDateDisplay": "Jan 22, 2024 (for 2024 cycle)",
+    "eligibilityHighlightsPast": "UG students (3rd/4th yr) with strong interest in theoretical physics.",
+    "eligibilityKeywords": ["undergraduate", "ug", "3rd year", "4th year", "theoretical physics"],
+    "generalRequiredDocumentsPast": "Online application, transcripts, SoI, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://perimeterinstitute.ca/psi-start-program"
+  },
+  {
+    "id": "mitacs_globalink_2023",
+    "instituteName": "Mitacs Globalink Research Internship",
+    "programName": "Research Internships in Canada",
+    "locationCity": "Various Canada",
+    "locationCountry": "Canada",
+    "region": "North America (USA & Canada)",
+    "category": "North America",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, travel, accommodation",
+    "lastDateApplyIllustrative": "2023-09-21",
+    "lastDateDisplay": "Sep of previous year (e.g., Sep 21, 2023 for Summer 2024)",
+    "eligibilityHighlightsPast": "International UG students from eligible countries (incl. India). Specific year and GPA requirements.",
+    "eligibilityKeywords": ["international", "undergraduate", "ug", "india", "specific year", "gpa"],
+    "generalRequiredDocumentsPast": "Online application through Mitacs portal.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.mitacs.ca/en/programs/globalink/globalink-research-internship"
+  },
+  {
+    "id": "cern_ssp_2024",
+    "instituteName": "CERN",
+    "programName": "Summer Student Programme",
+    "locationCity": "Geneva",
+    "locationCountry": "Switzerland",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "subsistence, travel, insurance",
+    "lastDateApplyIllustrative": "2024-01-31",
+    "lastDateDisplay": "Jan 31, 2024",
+    "eligibilityHighlightsPast": "Bachelor or Master students (not PhD) in Physics, Engg, CS, Math. Completed 3+ years university study. Good English.",
+    "eligibilityKeywords": ["bachelor", "master", "physics", "engineering", "cs", "math", "3+ years university"],
+    "generalRequiredDocumentsPast": "CV, academic transcript, reference letter(s).",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://careers.cern/summer"
+  },
+  {
+    "id": "daad_rise_germany_2023",
+    "instituteName": "DAAD Germany",
+    "programName": "RISE Germany",
+    "locationCity": "Various",
+    "locationCountry": "Germany",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "scholarship, travel, insurance",
+    "lastDateApplyIllustrative": "2023-12-15",
+    "lastDateDisplay": "Dec 15, 2023 (for Summer 2024)",
+    "eligibilityHighlightsPast": "UG students from USA, Canada, UK, Ireland in relevant fields. Completed specific years of study.",
+    "eligibilityKeywords": ["undergraduate", "ug", "usa", "canada", "uk", "ireland", "specific years"],
+    "generalRequiredDocumentsPast": "Online application, CV, cover letter, transcript, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.daad.de/rise/en/rise-germany/"
+  },
+  {
+    "id": "desy_ssp_2024",
+    "instituteName": "DESY Germany",
+    "programName": "Summer Student Programme",
+    "locationCity": "Hamburg/Zeuthen",
+    "locationCountry": "Germany",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "allowance",
+    "lastDateApplyIllustrative": "2024-01-31",
+    "lastDateDisplay": "Jan 31, 2024",
+    "eligibilityHighlightsPast": "UG (completed 3+ years) or Master students in Physics, Nat Sci, Computing. Not PhD.",
+    "eligibilityKeywords": ["undergraduate", "ug", "3+ years", "master", "physics", "natural science", "computing"],
+    "generalRequiredDocumentsPast": "Online application, CV, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://summerstudents.desy.de/"
+  },
+  {
+    "id": "eth_srf_cs_2023",
+    "instituteName": "ETH Zurich",
+    "programName": "Summer Research Fellowship (SRF) - Comp Sci (check physics links)",
+    "locationCity": "Zurich",
+    "locationCountry": "Switzerland",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, travel, visa",
+    "lastDateApplyIllustrative": "2023-12-15",
+    "lastDateDisplay": "Dec 15, 2023 (for 2024)",
+    "eligibilityHighlightsPast": "Bachelor's or Master's in CS or related (e.g., physics). Completed 2+ years Bachelor's.",
+    "eligibilityKeywords": ["bachelor's", "master's", "cs", "computer science", "physics", "2+ years bachelor's"],
+    "generalRequiredDocumentsPast": "Online application, CV, transcript, LoM, LoR(s).",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://inf.ethz.ch/studies/summer-research-fellowship.html"
+  },
+  {
+    "id": "epfl_srp_e3_varies",
+    "instituteName": "EPFL (École Polytechnique Fédérale de Lausanne), Switzerland",
+    "programName": "Summer Research Program (SRP) / E3 Program (Engineering)",
+    "locationCity": "Lausanne",
+    "locationCountry": "Switzerland",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "CHF 3,200 for 2 months + travel/housing",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "SRP: Late Jan/Early Feb. E3: Early Feb.",
+    "eligibilityHighlightsPast": "SRP: UG (completed 2+ yrs) / Master's students in CS, Life Sci, Engg. E3: Engg students. Excellent academic record.",
+    "eligibilityKeywords": ["undergraduate", "ug", "2+ years", "master's", "cs", "life science", "engineering", "excellent academic record"],
+    "generalRequiredDocumentsPast": "Online application, CV, SoP, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.epfl.ch/education/internships/summer-research-programs/"
+  },
+  {
+    "id": "psi_ch_sp_varies",
+    "instituteName": "Paul Scherrer Institute (PSI), Switzerland",
+    "programName": "Summer Programs / Individual research group internships",
+    "locationCity": "Villigen",
+    "locationCountry": "Switzerland",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "some paid",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies (check specific programs/groups)",
+    "eligibilityHighlightsPast": "Advanced UG or Master's students in relevant fields.",
+    "eligibilityKeywords": ["advanced undergraduate", "ug", "master's"],
+    "generalRequiredDocumentsPast": "CV, cover letter, transcripts. Apply to program or specific group.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.psi.ch/en/education/summer-programs"
+  },
+  {
+    "id": "maxplanck_internships_varies",
+    "instituteName": "Max Planck Institutes, Germany",
+    "programName": "Internships (varies by institute, e.g., MPI for Physics)",
+    "locationCity": "Various",
+    "locationCountry": "Germany",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "often paid",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies by institute",
+    "eligibilityHighlightsPast": "Typically advanced UG or Master's students in Physics or related fields.",
+    "eligibilityKeywords": ["advanced undergraduate", "ug", "master's", "physics"],
+    "generalRequiredDocumentsPast": "CV, cover letter, transcripts, LoRs. Apply to specific institute/group.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.mpg.de/internships"
+  },
+  {
+    "id": "gsi_ssp_2024",
+    "instituteName": "GSI Helmholtzzentrum für Schwerionenforschung, Darmstadt, Germany",
+    "programName": "Summer Student Program",
+    "locationCity": "Darmstadt",
+    "locationCountry": "Germany",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "allowance",
+    "lastDateApplyIllustrative": "2024-02-15",
+    "lastDateDisplay": "Feb 15, 2024",
+    "eligibilityHighlightsPast": "Advanced UG (completed 3+ yrs) or Master's students in Physics or related fields from Europe or GSI partner countries.",
+    "eligibilityKeywords": ["advanced undergraduate", "ug", "3+ years", "master's", "physics", "europe", "gsi partner countries"],
+    "generalRequiredDocumentsPast": "Online application, CV, transcripts, LoR.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.gsi.de/en/work/fellowships/summer_student_program.htm"
+  },
+  {
+    "id": "eso_ip_varies",
+    "instituteName": "European Southern Observatory (ESO), Germany",
+    "programName": "Internship Program",
+    "locationCity": "Garching",
+    "locationCountry": "Germany",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "monthly allowance",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "May 31 / Nov 30 (twice a year)",
+    "eligibilityHighlightsPast": "Students who are enrolled in or have recently completed a university degree (BSc, MSc, or PhD).",
+    "eligibilityKeywords": ["bsc", "msc", "phd", "enrolled", "recently completed"],
+    "generalRequiredDocumentsPast": "Online application, CV, cover letter, transcripts, LoRs (for PhD).",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.eso.org/public/jobs/internships/"
+  },
+  {
+    "id": "cambridge_cavendish_srp_varies",
+    "instituteName": "University of Cambridge, Cavendish Laboratory, UK",
+    "programName": "Summer Research Placements / Amgen Scholars (check physics relevance)",
+    "locationCity": "Cambridge",
+    "locationCountry": "UK",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies (e.g., Amgen: Feb 1)",
+    "eligibilityHighlightsPast": "UG students (often penultimate year) in Physics or related fields. Amgen: Specific European university criteria.",
+    "eligibilityKeywords": ["undergraduate", "ug", "penultimate year", "physics", "amgen", "european university"],
+    "generalRequiredDocumentsPast": "CV, cover letter, transcripts, references.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.phy.cam.ac.uk/summer-placements"
+  },
+  {
+    "id": "imperial_urop_gss_varies",
+    "instituteName": "Imperial College London, UK",
+    "programName": "Undergraduate Research Opportunities Programme (UROP) / Global Summer School (Physics stream)",
+    "locationCity": "London",
+    "locationCountry": "UK",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "UROP: Varies (can be paid). Summer School: Fee.",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "UROP: Ongoing. Summer School: Apr/May.",
+    "eligibilityHighlightsPast": "UROP: Imperial UG students primarily. Summer School: UG students.",
+    "eligibilityKeywords": ["urop", "imperial students", "undergraduate", "ug", "summer school"],
+    "generalRequiredDocumentsPast": "UROP: Proposal. Summer School: Application form.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.imperial.ac.uk/urop -or- /global-summer-school"
+  },
+  {
+    "id": "ill_grenoble_sp_varies",
+    "instituteName": "ILL (Institut Laue-Langevin), Grenoble, France",
+    "programName": "Summer Programme / Internships",
+    "locationCity": "Grenoble",
+    "locationCountry": "France",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, travel, accommodation",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies (check website, e.g., Feb/Mar)",
+    "eligibilityHighlightsPast": "UG (3rd/4th yr) or Master's students in Physics, Chemistry, Materials Science.",
+    "eligibilityKeywords": ["undergraduate", "ug", "3rd year", "4th year", "master's", "physics", "chemistry", "materials science"],
+    "generalRequiredDocumentsPast": "Application form, CV, cover letter, transcripts, LoR.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.ill.eu/careers/students/"
+  },
+  {
+    "id": "esrf_ssp_varies",
+    "instituteName": "ESRF (European Synchrotron Radiation Facility), Grenoble, France",
+    "programName": "Summer Student Programme",
+    "locationCity": "Grenoble",
+    "locationCountry": "France",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "allowance, travel, accommodation",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Mar/Apr",
+    "eligibilityHighlightsPast": "UG students (completed 2+ yrs) in Physics, Chemistry, Biology, Materials Science.",
+    "eligibilityKeywords": ["undergraduate", "ug", "2+ years", "physics", "chemistry", "biology", "materials science"],
+    "generalRequiredDocumentsPast": "Online application, CV, transcripts, LoR.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.esrf.eu/home/jobs/student-programmes/summer-programme.html"
+  },
+  {
+    "id": "nikhef_ssp_2024",
+    "instituteName": "Nikhef, Amsterdam, Netherlands",
+    "programName": "Summer Student Program",
+    "locationCity": "Amsterdam",
+    "locationCountry": "Netherlands",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "allowance",
+    "lastDateApplyIllustrative": "2024-02-01",
+    "lastDateDisplay": "Feb 1, 2024",
+    "eligibilityHighlightsPast": "Students who have completed at least three years of university level studies in physics by the time of the programme.",
+    "eligibilityKeywords": ["3+ years university", "physics"],
+    "generalRequiredDocumentsPast": "Online application, CV, transcripts, LoR.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.nikhef.nl/summerstudents/"
+  },
+  {
+    "id": "infn_ssp_varies",
+    "instituteName": "INFN (National Institute for Nuclear Physics), Italy",
+    "programName": "Summer Student Programs (at various labs like LNF, LNS, Gran Sasso)",
+    "locationCity": "Various",
+    "locationCountry": "Italy",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "fellowship, accommodation",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies by lab (e.g., Feb-Apr)",
+    "eligibilityHighlightsPast": "UG (final years) or Master's students in Physics or Engineering.",
+    "eligibilityKeywords": ["undergraduate", "ug", "final years", "master's", "physics", "engineering"],
+    "generalRequiredDocumentsPast": "Application form, CV, transcripts, LoR. Check specific lab.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://home.infn.it/en/opportunities/summer-student-programs/"
+  },
+  {
+    "id": "iac_si_2024",
+    "instituteName": "IAC (Instituto de Astrofísica de Canarias), Tenerife, Spain",
+    "programName": "Summer Internships for university students",
+    "locationCity": "Tenerife",
+    "locationCountry": "Spain",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, travel, accommodation",
+    "lastDateApplyIllustrative": "2024-03-31",
+    "lastDateDisplay": "Mar 31, 2024",
+    "eligibilityHighlightsPast": "UG (last 2 yrs) or Master's students (not yet PhD) in Physics or Maths. Good academic record.",
+    "eligibilityKeywords": ["undergraduate", "ug", "last 2 years", "master's", "physics", "maths", "good academic record"],
+    "generalRequiredDocumentsPast": "Online application, CV, transcript, SoP, LoR.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iac.es/en/outreach/summer-internships"
+  },
+  {
+    "id": "icfo_sfp_2024",
+    "instituteName": "ICFO (The Institute of Photonic Sciences), Barcelona, Spain",
+    "programName": "Summer Fellows Program",
+    "locationCity": "Barcelona",
+    "locationCountry": "Spain",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, travel allowance",
+    "lastDateApplyIllustrative": "2024-03-31",
+    "lastDateDisplay": "Mar 31, 2024",
+    "eligibilityHighlightsPast": "UG or Master's students in relevant fields (Physics, Engineering).",
+    "eligibilityKeywords": ["undergraduate", "ug", "master's", "physics", "engineering"],
+    "generalRequiredDocumentsPast": "Online application, CV, transcripts, SoP, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.icfo.eu/summer-fellows/"
+  },
+  {
+    "id": "nbi_srp_varies",
+    "instituteName": "Niels Bohr Institute, Copenhagen, Denmark",
+    "programName": "Summer Research Programs (check specific research groups or announcements)",
+    "locationCity": "Copenhagen",
+    "locationCountry": "Denmark",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "may be paid",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies",
+    "eligibilityHighlightsPast": "Advanced UG or Master's students in Physics.",
+    "eligibilityKeywords": ["advanced undergraduate", "ug", "master's", "physics"],
+    "generalRequiredDocumentsPast": "CV, cover letter, contact specific groups.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.nbi.ku.dk/english/education/summer-programs/"
+  },
+  {
+    "id": "ista_isternship_2024",
+    "instituteName": "Institute of Science and Technology Austria (ISTA)",
+    "programName": "ISTernship Summer Program",
+    "locationCity": "Klosterneuburg",
+    "locationCountry": "Austria",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "Paid (monthly salary, travel, health)",
+    "lastDateApplyIllustrative": "2024-02-15",
+    "lastDateDisplay": "Feb 15, 2024",
+    "eligibilityHighlightsPast": "Enrolled Bachelor's or Master's students in natural/computer sciences, math, etc. Must have completed at least 4th semester Bachelor's or be within 1 year of graduation.",
+    "eligibilityKeywords": ["bachelor's", "master's", "natural sciences", "computer sciences", "math", "4th semester bachelor's", "within 1 year graduation"],
+    "generalRequiredDocumentsPast": "Online application, CV, SoP, transcripts, contact details for 1-2 referees.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://phd.pages.ista.ac.at/isternship/"
+  },
+  {
+    "id": "oxfordphy_srp_varies",
+    "instituteName": "University of Oxford, UK Physics Dept.",
+    "programName": "Summer Research Placements (check departmental internship listings)",
+    "locationCity": "Oxford",
+    "locationCountry": "UK",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "Often paid (stipend varies)",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies (e.g., Jan-Mar)",
+    "eligibilityHighlightsPast": "UG students (often penultimate year) in Physics or related fields with strong academic record.",
+    "eligibilityKeywords": ["undergraduate", "ug", "penultimate year", "physics", "strong academic record"],
+    "generalRequiredDocumentsPast": "CV, cover letter, transcripts, references. Check specific project ads.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.physics.ox.ac.uk/study/summer-research-placements"
+  },
+  {
+    "id": "leshouches_ts_varies",
+    "instituteName": "Les Houches School of Physics, France",
+    "programName": "Thematic Schools",
+    "locationCity": "Les Houches",
+    "locationCountry": "France",
+    "region": "Europe",
+    "category": "Europe",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "Financial aid often available",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies significantly based on the school. Check their program calendar.",
+    "eligibilityHighlightsPast": "Primarily aimed at PhD students and young researchers, but some schools might be accessible to advanced MSc students depending on the topic.",
+    "eligibilityKeywords": ["phd", "young researchers", "advanced msc"],
+    "generalRequiredDocumentsPast": "Application form, CV, publication list (if any), letter(s) of recommendation, statement of motivation.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://houches.univ-grenoble-alpes.fr/en/"
+  },
+  {
+    "id": "riken_cbs_sp_2024",
+    "instituteName": "RIKEN Centers (e.g., Center for Brain Science - CBS), Japan",
+    "programName": "CBS Summer Program / Other RIKEN Center Internships",
+    "locationCity": "Various",
+    "locationCountry": "Japan",
+    "region": "Asia (Outside India)",
+    "category": "Asia (Outside India)",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, accommodation support",
+    "lastDateApplyIllustrative": "2024-02-01",
+    "lastDateDisplay": "Early Feb (for CBS Summer Program)",
+    "eligibilityHighlightsPast": "UG (3rd/4th yr) & Master's students in STEM fields. Specific requirements vary by RIKEN center/program.",
+    "eligibilityKeywords": ["undergraduate", "ug", "3rd year", "4th year", "master's", "stem"],
+    "generalRequiredDocumentsPast": "Online application, CV, SoP, transcripts, LoR(s).",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.riken.jp/en/careers/programs/"
+  },
+  {
+    "id": "oist_rip_varies",
+    "instituteName": "OIST Japan",
+    "programName": "Research Internship Program",
+    "locationCity": "Okinawa",
+    "locationCountry": "Japan",
+    "region": "Asia (Outside India)",
+    "category": "Asia (Outside India)",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "JPY 2,400/day, travel, accommodation",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Mar 31 / Oct 15 (rolling)",
+    "eligibilityHighlightsPast": "UG (final 2 yrs) or PG students in STEM fields. Excellent academic record.",
+    "eligibilityKeywords": ["undergraduate", "ug", "final 2 years", "postgraduate", "pg", "stem", "excellent academic record"],
+    "generalRequiredDocumentsPast": "Online application, SoI, CV, transcript, LoR, ID photo.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://admissions.oist.jp/oist-research-internship-program"
+  },
+  {
+    "id": "kek_ssp_2024",
+    "instituteName": "KEK, Japan",
+    "programName": "SOKENDAI KEK Tsukuba/J-PARC Summer Student Program",
+    "locationCity": "Tsukuba/Tokai",
+    "locationCountry": "Japan",
+    "region": "Asia (Outside India)",
+    "category": "Asia (Outside India)",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, accommodation, travel",
+    "lastDateApplyIllustrative": "2024-01-15",
+    "lastDateDisplay": "Jan 2024 (approx.)",
+    "eligibilityHighlightsPast": "Master's students or senior UG students in physics or related fields.",
+    "eligibilityKeywords": ["master's", "senior undergraduate", "ug", "physics"],
+    "generalRequiredDocumentsPast": "Application form, CV, transcripts, LoR.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.kek.jp/en/education/sokendai/summer-student-program/"
+  },
+  {
+    "id": "academiasinica_tigpsip_2024",
+    "instituteName": "Academia Sinica, Taiwan",
+    "programName": "TIGP Summer Internship Program (SIP)",
+    "locationCity": "Taipei",
+    "locationCountry": "Taiwan",
+    "region": "Asia (Outside India)",
+    "category": "Asia (Outside India)",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, travel subsidy",
+    "lastDateApplyIllustrative": "2024-02-28",
+    "lastDateDisplay": "Feb 28, 2024",
+    "eligibilityHighlightsPast": "UG (completed 2+ yrs), Master's students in relevant fields. Min GPA 3.2/4.0 or equivalent.",
+    "eligibilityKeywords": ["undergraduate", "ug", "2+ years", "master's", "gpa 3.2"],
+    "generalRequiredDocumentsPast": "Online application, CV, SoP, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://tigp.sinica.edu.tw/sip/"
+  },
+  {
+    "id": "utokyo_utsip_kashiwa_2024",
+    "instituteName": "University of Tokyo, Japan",
+    "programName": "UTSIP Kashiwa (Summer Internship)",
+    "locationCity": "Kashiwa",
+    "locationCountry": "Japan",
+    "region": "Asia (Outside India)",
+    "category": "Asia (Outside India)",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "allowance",
+    "lastDateApplyIllustrative": "2024-02-07",
+    "lastDateDisplay": "Early Feb (e.g., Feb 7, 2024)",
+    "eligibilityHighlightsPast": "UG (completed 2+ yrs) students from overseas universities in natural sciences.",
+    "eligibilityKeywords": ["undergraduate", "ug", "2+ years", "overseas universities", "natural sciences"],
+    "generalRequiredDocumentsPast": "Online application, CV, personal statement, transcripts, LoR, photo.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.k.u-tokyo.ac.jp/en/education/utsip/"
+  },
+  {
+    "id": "sjtu_physics_iss_2024",
+    "instituteName": "Shanghai Jiao Tong University (SJTU), China",
+    "programName": "Physics International Summer School (\"The Largest and the Smallest\")",
+    "locationCity": "Shanghai",
+    "locationCountry": "China",
+    "region": "Asia (Outside India)",
+    "category": "Asia (Outside India)",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "Program fee applies; scholarships may be available",
+    "lastDateApplyIllustrative": "2024-04-25",
+    "lastDateDisplay": "Typically around April. (e.g., April 25, 2024 for 2024).",
+    "eligibilityHighlightsPast": "Undergraduate students with a strong interest in physics.",
+    "eligibilityKeywords": ["undergraduate", "ug", "physics"],
+    "generalRequiredDocumentsPast": "Online application.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "http://physicschool.sjtu.edu.cn/summerschool/"
+  },
+  {
+    "id": "utokyo_kavli_ipmu_sp_2024",
+    "instituteName": "University of Tokyo, Kavli IPMU, Japan",
+    "programName": "Kavli IPMU Summer Program",
+    "locationCity": "Kashiwa",
+    "locationCountry": "Japan",
+    "region": "Asia (Outside India)",
+    "category": "Asia (Outside India)",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, accommodation, travel",
+    "lastDateApplyIllustrative": "2024-02-01",
+    "lastDateDisplay": "Early Feb",
+    "eligibilityHighlightsPast": "Advanced UG (typically final year) or early Master's students in Physics, Maths, Astronomy.",
+    "eligibilityKeywords": ["advanced undergraduate", "ug", "final year", "early master's", "physics", "maths", "astronomy"],
+    "generalRequiredDocumentsPast": "Online application, CV, transcripts, LoRs, statement of research interests.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.ipmu.jp/en/research-activities/summer-program"
+  },
+  {
+    "id": "pekinguni_phy_ssp_vsp_varies",
+    "instituteName": "Peking University, School of Physics, China",
+    "programName": "Summer Schools / Visiting Student Programs (check for specific announcements)",
+    "locationCity": "Beijing",
+    "locationCountry": "China",
+    "region": "Asia (Outside India)",
+    "category": "Asia (Outside India)",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "some schools may offer support",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies (often Mar-May)",
+    "eligibilityHighlightsPast": "Advanced UG or Master's students in Physics. Specific eligibility depends on the program.",
+    "eligibilityKeywords": ["advanced undergraduate", "ug", "master's", "physics"],
+    "generalRequiredDocumentsPast": "Application form, CV, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "http://www.phy.pku.edu.cn/english/summerprograms"
+  },
+  {
+    "id": "tsinghuauni_phy_sp_eo_varies",
+    "instituteName": "Tsinghua University, Dept. of Physics, China",
+    "programName": "Summer Programs / Exchange Opportunities (check for specific announcements)",
+    "locationCity": "Beijing",
+    "locationCountry": "China",
+    "region": "Asia (Outside India)",
+    "category": "Asia (Outside India)",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies",
+    "eligibilityHighlightsPast": "Advanced UG or Master's students in Physics.",
+    "eligibilityKeywords": ["advanced undergraduate", "ug", "master's", "physics"],
+    "generalRequiredDocumentsPast": "Application form, CV, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "http://www.phys.tsinghua.edu.cn/en/summerprograms"
+  },
+  {
+    "id": "ntu_phy_sri_plus_varies",
+    "instituteName": "National Taiwan University, Dept. of Physics",
+    "programName": "Summer Research Internships (often by contacting faculty) / NTU Plus Academy Summer+ Programs",
+    "locationCity": "Taipei",
+    "locationCountry": "Taiwan",
+    "region": "Asia (Outside India)",
+    "category": "Asia (Outside India)",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "some research paid, Summer+ has fees",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies (Faculty: ongoing. Summer+: Apr/May)",
+    "eligibilityHighlightsPast": "UG/PG students in Physics. Summer+ has specific course eligibility.",
+    "eligibilityKeywords": ["undergraduate", "ug", "postgraduate", "pg", "physics", "summer+"],
+    "generalRequiredDocumentsPast": "CV, email to faculty for research. Summer+: Online application, transcript.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "http://www.phys.ntu.edu.tw/enresearch/summer-internships"
+  },
+  {
+    "id": "snu_isp_ri_varies",
+    "instituteName": "Seoul National University (SNU), South Korea",
+    "programName": "SNU International Summer Program (ISP) / Research Internships (contact depts)",
+    "locationCity": "Seoul",
+    "locationCountry": "S. Korea",
+    "region": "Asia (Outside India)",
+    "category": "Asia (Outside India)",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "ISP: Fee-based. Research: Varies",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "ISP: Early May. Research: Varies",
+    "eligibilityHighlightsPast": "ISP: UG/PG students. Research: UG (advanced) or Master's students.",
+    "eligibilityKeywords": ["undergraduate", "ug", "postgraduate", "pg", "advanced ug", "master's"],
+    "generalRequiredDocumentsPast": "ISP: Online application. Research: CV, email to faculty.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "http://summer.snu.ac.kr/ -or- snu_department_research_internships"
+  },
+  {
+    "id": "kaist_sri_iss_varies",
+    "instituteName": "KAIST, South Korea",
+    "programName": "Summer Research Internships (contact depts/labs) / KAIST International Summer School",
+    "locationCity": "Daejeon",
+    "locationCountry": "S. Korea",
+    "region": "Asia (Outside India)",
+    "category": "Asia (Outside India)",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "Varies. Summer School: Fee-based.",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies",
+    "eligibilityHighlightsPast": "UG (advanced) or Master's students in relevant fields.",
+    "eligibilityKeywords": ["undergraduate", "ug", "advanced", "master's"],
+    "generalRequiredDocumentsPast": "CV, email to faculty for research. Summer School: Online application.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://summer.kaist.ac.kr/ -or- kaist_department_research_internships"
+  },
+  {
+    "id": "ntusg_sri_ss_varies",
+    "instituteName": "Nanyang Technological University (NTU), Singapore",
+    "programName": "Summer Research Internship (NTU-India Connect, other specific programs) / Summer School",
+    "locationCity": "Singapore",
+    "locationCountry": "Singapore",
+    "region": "Asia (Outside India)",
+    "category": "Asia (Outside India)",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "Yes (for some research programs). School: Fee",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies (India Connect: e.g., Oct of prev. yr)",
+    "eligibilityHighlightsPast": "Research: UG students from Indian universities (for India Connect) or other specific criteria. School: UG/PG students.",
+    "eligibilityKeywords": ["undergraduate", "ug", "indian universities", "india connect", "postgraduate", "pg"],
+    "generalRequiredDocumentsPast": "Online application, transcripts, LoR.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://global.ntu.edu.sg/GMP/sri/Pages/default.aspx"
+  },
+  {
+    "id": "astar_internships_varies",
+    "instituteName": "A*STAR Research Institutes, Singapore",
+    "programName": "Internships (e.g., SIPGA for PhD focus, but UG internships may be available at institutes)",
+    "locationCity": "Singapore",
+    "locationCountry": "Singapore",
+    "region": "Asia (Outside India)",
+    "category": "Asia (Outside India)",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies by institute/program",
+    "eligibilityHighlightsPast": "UG (advanced) or PG students in STEM. High academic standing.",
+    "eligibilityKeywords": ["undergraduate", "ug", "advanced", "postgraduate", "pg", "stem", "high academic standing"],
+    "generalRequiredDocumentsPast": "Online application via specific institute or A*STAR portal, CV, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.a-star.edu.sg/Scholarships/for-undergraduate-studies/a-star-research-internship-programme"
+  },
+  {
+    "id": "anu_srs_prev_yr",
+    "instituteName": "Australian National University (ANU)",
+    "programName": "ANU Summer Research Scholarship",
+    "locationCity": "Canberra",
+    "locationCountry": "Australia",
+    "region": "Australia & New Zealand",
+    "category": "Australia & New Zealand",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend, travel/accom. allowance",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Aug 31 of previous year",
+    "eligibilityHighlightsPast": "Domestic & International students who have completed specific number of units/years of UG study with high academic standing.",
+    "eligibilityKeywords": ["domestic", "international", "undergraduate", "ug", "high academic standing"],
+    "generalRequiredDocumentsPast": "Online application, transcripts, supporting statements.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.anu.edu.au/study/scholarships/find-a-scholarship/anu-summer-research-scholarship"
+  },
+  {
+    "id": "unimelb_srp_varies",
+    "instituteName": "University of Melbourne, Australia",
+    "programName": "Summer Research Programs (Faculty-specific)",
+    "locationCity": "Melbourne",
+    "locationCountry": "Australia",
+    "region": "Australia & New Zealand",
+    "category": "Australia & New Zealand",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "scholarship/stipend often available",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies by faculty (e.g., Aug-Oct of prev. yr)",
+    "eligibilityHighlightsPast": "Domestic & International UG students (often penultimate or final year) with high academic achievement.",
+    "eligibilityKeywords": ["domestic", "international", "undergraduate", "ug", "penultimate year", "final year", "high academic achievement"],
+    "generalRequiredDocumentsPast": "Expression of Interest, CV, transcripts, LoRs (may be required). Check specific faculty guidelines.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://study.unimelb.edu.au/find/summer-research-programs/"
+  },
+  {
+    "id": "unisyd_srs_varies",
+    "instituteName": "University of Sydney, Australia",
+    "programName": "Summer Research Scholarships / Internships",
+    "locationCity": "Sydney",
+    "locationCountry": "Australia",
+    "region": "Australia & New Zealand",
+    "category": "Australia & New Zealand",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "scholarship/stipend",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies by school/dept (e.g., Aug-Oct of prev. yr)",
+    "eligibilityHighlightsPast": "UG students (often completed specific number of years) with strong academic record.",
+    "eligibilityKeywords": ["undergraduate", "ug", "strong academic record"],
+    "generalRequiredDocumentsPast": "Online application, CV, academic transcripts, research proposal/statement of interest.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.sydney.edu.au/scholarships/e/summer-research-scholarships.html"
+  },
+  {
+    "id": "monash_srsp_prev_yr",
+    "instituteName": "Monash University, Australia",
+    "programName": "Summer Research Scholarship Program",
+    "locationCity": "Melbourne",
+    "locationCountry": "Australia",
+    "region": "Australia & New Zealand",
+    "category": "Australia & New Zealand",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Aug/Sep of previous year",
+    "eligibilityHighlightsPast": "UG students (penultimate year) from Australian/NZ universities, or international students enrolled at Monash. Specific GPA requirements.",
+    "eligibilityKeywords": ["undergraduate", "ug", "penultimate year", "australian university", "nz university", "international students", "monash enrolled", "gpa"],
+    "generalRequiredDocumentsPast": "Online application, transcripts, contact with supervisor often needed.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.monash.edu/study/scholarships/find/summer-research-scholarship"
+  },
+  {
+    "id": "csiro_uvs_pgs_varies",
+    "instituteName": "CSIRO (Commonwealth Scientific and Industrial Research Organisation), Australia",
+    "programName": "Undergraduate Vacation Scholarships / Postgraduate Scholarships",
+    "locationCity": "Various",
+    "locationCountry": "Australia",
+    "region": "Australia & New Zealand",
+    "category": "Australia & New Zealand",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies (UG often Aug-Oct of prev. yr)",
+    "eligibilityHighlightsPast": "UG: Students who have completed at least one year of a relevant UG degree. PG: For Masters/PhD candidates. Australian citizens/PRs often preferred for UG, but check specifics.",
+    "eligibilityKeywords": ["undergraduate", "ug", "one year completed", "postgraduate", "pg", "master's", "phd", "australian citizen", "pr"],
+    "generalRequiredDocumentsPast": "Online application, CV, transcripts, statement addressing selection criteria.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.csiro.au/en/careers/scholarships-and-studentships"
+  },
+  {
+    "id": "uoa_srs_2023_24",
+    "instituteName": "University of Auckland, New Zealand",
+    "programName": "Summer Research Scholarships",
+    "locationCity": "Auckland",
+    "locationCountry": "NZ",
+    "region": "Australia & New Zealand",
+    "category": "Australia & New Zealand",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "NZD $6,000+ for 2023-24",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Early Aug of previous year",
+    "eligibilityHighlightsPast": "UG or Master's students enrolled at a NZ university (some projects open to international students enrolled at NZ uni). Specific GPA requirements.",
+    "eligibilityKeywords": ["undergraduate", "ug", "master's", "nz university enrolled", "international students nz enrolled", "gpa"],
+    "generalRequiredDocumentsPast": "Online application, academic transcript, CV (may be required by project).",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.auckland.ac.nz/en/study/scholarships-and-awards/find-scholarships/summer-research-scholarships.html"
+  },
+  {
+    "id": "vuw_srs_prev_yr",
+    "instituteName": "Victoria University of Wellington, New Zealand",
+    "programName": "Summer Research Scholarships",
+    "locationCity": "Wellington",
+    "locationCountry": "NZ",
+    "region": "Australia & New Zealand",
+    "category": "Australia & New Zealand",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Mid-Aug of previous year",
+    "eligibilityHighlightsPast": "UG students (typically completed 2nd or 3rd year) enrolled at a NZ university. Good academic record.",
+    "eligibilityKeywords": ["undergraduate", "ug", "2nd year completed", "3rd year completed", "nz university enrolled", "good academic record"],
+    "generalRequiredDocumentsPast": "Online application, academic transcript.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.wgtn.ac.nz/scholarships/types-of-scholarships/summer-research"
+  },
+  {
+    "id": "iter_is_varies",
+    "instituteName": "ITER International School (Fusion Energy)",
+    "programName": "ITER International School (various themes, some student-focused)",
+    "locationCity": "Often Cadarache, France (or online/hybrid)",
+    "locationCountry": "France",
+    "region": "Other International Programs / Organizations",
+    "category": "Other International",
+    "modePast": "Hybrid/Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "some support may be available",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies by edition (e.g., Feb/Mar)",
+    "eligibilityHighlightsPast": "Ranges from advanced UG/Master's students to PhDs and young professionals, depending on the school's focus.",
+    "eligibilityKeywords": ["advanced undergraduate", "ug", "master's", "phd", "young professionals"],
+    "generalRequiredDocumentsPast": "Online application, CV, motivation letter, sometimes LoR.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.iter.org/jobs/schools"
+  },
+  {
+    "id": "mcqst_sbp_varies",
+    "instituteName": "MCQST (Munich Center for Quantum Science and Technology), Germany",
+    "programName": "MCQST Summer Bachelor Program",
+    "locationCity": "Munich",
+    "locationCountry": "Germany",
+    "region": "Other International Programs / Organizations",
+    "category": "Other International",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "accommodation, travel, stipend",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Mid-March",
+    "eligibilityHighlightsPast": "Highly motivated Bachelor students in Physics, Mathematics, CS, Engineering with a strong interest in Quantum Science & Technology. Typically completed 2 years of study.",
+    "eligibilityKeywords": ["bachelor", "physics", "mathematics", "cs", "engineering", "quantum science", "2 years completed"],
+    "generalRequiredDocumentsPast": "Online application, CV, transcripts, motivation letter, LoR.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.mcqst.de/education/summer-bachelor-program.html"
+  },
+  {
+    "id": "breakthroughlisten_suri_varies",
+    "instituteName": "Breakthrough Listen (often via specific universities like Berkeley)",
+    "programName": "Summer Undergraduate Research Internships",
+    "locationCity": "e.g., Berkeley, CA, USA (or other sites)",
+    "locationCountry": "USA",
+    "region": "Other International Programs / Organizations",
+    "category": "Other International",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "stipend",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Early Feb",
+    "eligibilityHighlightsPast": "UG students in STEM fields interested in astronomy and SETI research. Eligibility may depend on host institution (e.g., US citizenship/PR for some Berkeley-hosted REUs).",
+    "eligibilityKeywords": ["undergraduate", "ug", "stem", "astronomy", "seti", "us citizenship", "pr"],
+    "generalRequiredDocumentsPast": "Application via host institution's portal (e.g., Berkeley SETI REU), CV, SoP, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://breakthroughinitiatives.org/initiative/3"
+  },
+  {
+    "id": "fulbright_various_varies",
+    "instituteName": "Fulbright Program (various types)",
+    "programName": "Fulbright-Nehru (for Indians to US) / Other Fulbright Student Programs",
+    "locationCity": "USA (for Indians) / Various (for US citizens)",
+    "locationCountry": "Various",
+    "region": "Other International Programs / Organizations",
+    "category": "Other International",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "comprehensive grant",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Varies by country/program (e.g., India: May/June for next academic year)",
+    "eligibilityHighlightsPast": "For Indian applicants: Indian citizens with excellent academics, specific degree requirements (e.g., Bachelor's completed for Master's awards). For US citizens: Varies. Check specific awards.",
+    "eligibilityKeywords": ["indian citizens", "excellent academics", "bachelor's completed", "master's awards", "us citizens"],
+    "generalRequiredDocumentsPast": "Extensive online application, essays, transcripts, LoRs, English proficiency scores.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://usief.org.in/Fulbright-Nehru-Fellowships.aspx -or- https://fulbrightprogram.org/"
+  },
+  {
+    "id": "weizmann_kupcinetgetz_varies",
+    "instituteName": "Weizmann Institute of Science, Israel",
+    "programName": "Kupcinet-Getz International Summer School for Outstanding Undergraduate Students",
+    "locationCity": "Rehovot",
+    "locationCountry": "Israel",
+    "region": "Other International Programs / Organizations",
+    "category": "Other International",
+    "modePast": "Offline",
+    "stipendPaidPast": "Yes",
+    "stipendDetails": "fellowship, travel, accommodation",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Mid-Jan",
+    "eligibilityHighlightsPast": "Outstanding UG students in Life Sciences, Chemistry, Physics, Maths, CS, in their penultimate year of study.",
+    "eligibilityKeywords": ["undergraduate", "ug", "life sciences", "chemistry", "physics", "maths", "cs", "penultimate year"],
+    "generalRequiredDocumentsPast": "Online application, CV, personal statement, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.weizmann.ac.il/feinberg/admissions/kupcinet-getz-international-summer-school"
+  },
+  {
+    "id": "ictp_diploma_ss_varies",
+    "instituteName": "The Abdus Salam International Centre for Theoretical Physics (ICTP), Italy",
+    "programName": "Diploma Programme / Summer Schools (some may be open to advanced UGs/MSc)",
+    "locationCity": "Trieste",
+    "locationCountry": "Italy",
+    "region": "Other International Programs / Organizations",
+    "category": "Other International",
+    "modePast": "Offline",
+    "stipendPaidPast": "Varies",
+    "stipendDetails": "Diploma: Fellowship. Schools: Varies.",
+    "lastDateApplyIllustrative": "Varies",
+    "lastDateDisplay": "Diploma: Jan/Feb. Schools: Varies.",
+    "eligibilityHighlightsPast": "Diploma: Students from developing countries with BSc/MSc. Schools: MSc/PhD students typically, some advanced UGs for specific schools.",
+    "eligibilityKeywords": ["developing countries", "bsc", "msc", "phd", "advanced ug"],
+    "generalRequiredDocumentsPast": "Online application, CV, transcripts, LoRs.",
+    "dataSourceNote": "Based on 2024 or earlier data. VERIFY OFFICIAL SITE.",
+    "officialLinkPlaceholder": "https://www.ictp.it/programmes.aspx"
+  }
+]
+ // <<< PASTE YOUR FULL INTERNSHIP ARRAY HERE
+        // ----- END OF INTERNSHIP DATA -----
+    </script>
+
+    <!-- SCRIPT FOR APPLICATION LOGIC -->
+        <!-- SCRIPT FOR APPLICATION LOGIC -->
+    <script>
+        // ----- START OF APPLICATION LOGIC (app.js) -----
+        document.addEventListener('DOMContentLoaded', () => {
+            const internshipListings = document.getElementById('internship-listings');
+            const searchBox = document.getElementById('search-box');
+            const regionFilter = document.getElementById('region-filter');
+            const stipendFilter = document.getElementById('stipend-filter');
+            const modeFilter = document.getElementById('mode-filter');
+            const eligibilityFilter = document.getElementById('eligibility-filter');
+            const sortBy = document.getElementById('sort-by');
+            const clearFiltersBtn = document.getElementById('clear-filters');
+            const favoritesCountEl = document.getElementById('favorites-count');
+            const viewFavoritesBtn = document.getElementById('view-favorites-btn');
+            const clearFavoritesBtn = document.getElementById('clear-favorites-btn');
+            const deadlineThresholdInput = document.getElementById('deadline-threshold');
+
+            // Modal elements
+            const modal = document.getElementById('details-modal');
+            const modalCloseButton = document.querySelector('.modal .close-button');
+            const modalInstituteName = document.getElementById('modal-institute-name');
+            const modalProgramName = document.getElementById('modal-program-name');
+            const modalLocation = document.getElementById('modal-location');
+            const modalDeadline = document.getElementById('modal-deadline');
+            const modalStipend = document.getElementById('modal-stipend');
+            const modalMode = document.getElementById('modal-mode');
+            const modalEligibility = document.getElementById('modal-eligibility');
+            const modalDocuments = document.getElementById('modal-documents');
+            const modalOfficialLink = document.getElementById('modal-official-link');
+
+            let allInternshipsData = [];
+            let favorites = JSON.parse(localStorage.getItem('internshipFavorites')) || [];
+            let currentViewIsFavorites = false;
+
+            if (typeof internships !== 'undefined' && internships.length > 0) {
+                allInternshipsData = internships;
+                // The placeholder [Manually Update This Date] implies it should be static.
+                // If you want it dynamic (date data was loaded), this is fine.
+                // Otherwise, manually update the HTML or set a fixed date string here from your data source.
+                // For this exercise, we'll keep it dynamic as per original intent of the JS.
+                document.getElementById('data-refresh-date').textContent = new Date().toLocaleDateString();
+            } else {
+                internshipListings.innerHTML = '<p class="error">Error: Internship data is missing or empty. Please ensure the `internships` array is populated in the script.</p>';
+                console.error("Internship data (variable 'internships') is not defined or empty.");
+                [searchBox, regionFilter, stipendFilter, modeFilter, eligibilityFilter, sortBy, deadlineThresholdInput, clearFiltersBtn, viewFavoritesBtn, clearFavoritesBtn].forEach(el => el.disabled = true);
+                return;
+            }
+            
+            updateFavoritesCount();
+            renderInternships();
+
+
+            function renderInternships(internshipDataToRender = getFilteredAndSortedInternships()) {
+                internshipListings.innerHTML = '';
+                if (internshipDataToRender.length === 0) {
+                    internshipListings.innerHTML = `<p style="text-align:center; padding: 20px; color: var(--secondary-color);">
+                        ${currentViewIsFavorites && favorites.length === 0 ? 'Your shortlist is empty.' : 'No internships match your criteria. Try adjusting filters!'}
+                    </p>`;
+                    return;
+                }
+
+                const deadlineThresholdDays = parseInt(deadlineThresholdInput.value) || 30;
+
+                internshipDataToRender.forEach(internship => {
+                    const card = document.createElement('div');
+                    card.classList.add('internship-card');
+                    card.dataset.id = internship.id;
+
+                    const isFavorite = favorites.includes(internship.id);
+
+                    let deadlineText = internship.lastDateDisplay || 'Varies';
+                    let deadlineClass = '';
+                    let isPastDeadline = false;
+
+                    if (internship.lastDateApplyIllustrative && internship.lastDateApplyIllustrative !== "Varies") {
+                        try {
+                            const deadlineDate = new Date(internship.lastDateApplyIllustrative);
+                            const today = new Date();
+                            today.setHours(0,0,0,0);
+                            
+                            if (isNaN(deadlineDate.getTime())) {
+                                deadlineText = internship.lastDateDisplay || 'Varies (Date Error)';
+                            } else {
+                                const diffTime = deadlineDate - today;
+                                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                                if (diffDays >= 0 && diffDays <= deadlineThresholdDays) {
+                                    deadlineClass = 'deadline-soon';
+                                    deadlineText = `${internship.lastDateDisplay} (in ${diffDays} day${diffDays !== 1 ? 's' : ''})`;
+                                } else if (diffDays < 0) {
+                                    deadlineText = `${internship.lastDateDisplay} (Past)`;
+                                    isPastDeadline = true;
+                                } else {
+                                    deadlineText = internship.lastDateDisplay;
+                                }
+                            }
+                        } catch (e) {
+                            deadlineText = internship.lastDateDisplay || 'Varies (Date Error)';
+                        }
+                    }
+                    
+                    let stipendClass = '';
+                    if (internship.stipendPaidPast?.toLowerCase() === 'yes') {
+                        stipendClass = 'stipend-yes';
+                    }
+
+                    card.innerHTML = `
+                        <h3>${internship.instituteName}</h3>
+                        <p><strong>Program:</strong> ${internship.programName || 'N/A'}</p>
+                        <p><strong><i class="fas fa-map-marker-alt"></i> Location:</strong> ${internship.locationCity || 'N/A'}, ${internship.locationCountry || 'N/A'}</p>
+                        <p class="${deadlineClass}"><strong><i class="fas fa-calendar-alt"></i> Illustrative Deadline:</strong> ${deadlineText}</p>
+                        <p class="${stipendClass}"><strong><i class="fas fa-coins"></i> Stipend (Past):</strong> ${internship.stipendPaidPast || 'N/A'} ${internship.stipendDetails ? `(${internship.stipendDetails})` : ''}</p>
+                        <div class="actions">
+                            <button class="view-details-btn button">View Details</button>
+                            <a href="${internship.officialLinkPlaceholder || '#'}" class="button" target="_blank" rel="noopener noreferrer" ${(!internship.officialLinkPlaceholder || internship.officialLinkPlaceholder === '#') ? 'style="display:none;"' : ''}>Official Site</a>
+                        </div>
+                        <button class="favorite-btn ${isFavorite ? 'active' : ''}" title="${isFavorite ? 'Remove from shortlist' : 'Add to shortlist'}">
+                            <i class="${isFavorite ? 'fas fa-heart' : 'far fa-heart'}"></i>
+                        </button>
+                    `;
+                    
+                    if(isPastDeadline) {
+                        card.style.opacity = '0.6';
+                        card.style.borderLeftColor = 'var(--secondary-color)'; // Corrected: Target left border
+                    }
+
+                    internshipListings.appendChild(card);
+
+                    card.querySelector('.view-details-btn').addEventListener('click', () => showDetailsModal(internship));
+                    card.querySelector('.favorite-btn').addEventListener('click', (e) => {
+                        toggleFavorite(internship.id, e.currentTarget);
+                    });
+                });
+            }
+
+                        function getFilteredAndSortedInternships() {
+                let filtered = currentViewIsFavorites ? allInternshipsData.filter(i => favorites.includes(i.id)) : [...allInternshipsData];
+
+                const searchTerm = searchBox.value.toLowerCase().trim();
+                if (searchTerm) {
+                    filtered = filtered.filter(internship =>
+                        (internship.instituteName && internship.instituteName.toLowerCase().includes(searchTerm)) ||
+                        (internship.programName && internship.programName.toLowerCase().includes(searchTerm)) ||
+                        (internship.locationCity && internship.locationCity.toLowerCase().includes(searchTerm)) ||
+                        (internship.locationCountry && internship.locationCountry.toLowerCase().includes(searchTerm)) ||
+                        (internship.eligibilityKeywords && internship.eligibilityKeywords.some(k => k.toLowerCase().includes(searchTerm))) ||
+                        (internship.eligibilityHighlightsPast && internship.eligibilityHighlightsPast.toLowerCase().includes(searchTerm))
+                    );
+                }
+
+                if (regionFilter.value) {
+                    filtered = filtered.filter(i => i.region === regionFilter.value);
+                }
+                if (stipendFilter.value) {
+                     filtered = filtered.filter(i => {
+                        const stipendStatus = i.stipendPaidPast ? i.stipendPaidPast.toLowerCase() : "unknown";
+                        if (stipendFilter.value === "Yes") return stipendStatus === "yes";
+                        if (stipendFilter.value === "No") return stipendStatus === "no" || stipendStatus === "unpaid";
+                        if (stipendFilter.value === "Varies") return stipendStatus.includes("varies") || stipendStatus === "unknown";
+                        return false;
+                    });
+                }
+                if (modeFilter.value) {
+                    filtered = filtered.filter(i => i.modePast === modeFilter.value);
+                }
+                if (eligibilityFilter.value) {
+                    const elValue = eligibilityFilter.value.toLowerCase();
+                    filtered = filtered.filter(i => {
+                        const keywords = i.eligibilityKeywords?.map(k => k.toLowerCase()) || [];
+                        const highlights = i.eligibilityHighlightsPast?.toLowerCase() || "";
+                        if (elValue === 'ug') return keywords.includes('ug') || keywords.includes('undergraduate') || highlights.includes("undergraduate") || highlights.includes("bachelor") || highlights.includes("b.tech") || highlights.includes("b.sc");
+                        if (elValue === 'pg') return keywords.includes('pg') || keywords.includes('postgraduate') || highlights.includes("postgraduate") || highlights.includes("master") || highlights.includes("m.sc") || highlights.includes("m.tech");
+                        if (elValue === 'ug_pg') return (keywords.includes('ug') || keywords.includes('undergraduate') || highlights.includes("undergraduate") || highlights.includes("bachelor") || highlights.includes("b.tech") || highlights.includes("b.sc") ||
+                                                        keywords.includes('pg') || keywords.includes('postgraduate') || highlights.includes("postgraduate") || highlights.includes("master")|| highlights.includes("m.sc") || highlights.includes("m.tech"));
+                        return false;
+                    });
+                }
+
+                const sortValue = sortBy.value;
+                filtered.sort((a, b) => {
+                    if (sortValue === 'deadline') {
+                        // Corrected: Use 'let' instead of 'const'
+                        let dateA = (a.lastDateApplyIllustrative && a.lastDateApplyIllustrative !== "Varies" && !isNaN(new Date(a.lastDateApplyIllustrative))) ? new Date(a.lastDateApplyIllustrative) : new Date('9999-12-31');
+                        let dateB = (b.lastDateApplyIllustrative && b.lastDateApplyIllustrative !== "Varies" && !isNaN(new Date(b.lastDateApplyIllustrative))) ? new Date(b.lastDateApplyIllustrative) : new Date('9999-12-31');
+                        
+                        // This logic to handle very old dates making them effectively "last" in sort order
+                        if (dateA < new Date('1971-01-01')) dateA = new Date('9999-12-31');
+                        if (dateB < new Date('1971-01-01')) dateB = new Date('9999-12-31');
+                        
+                        return dateA - dateB;
+                    } else if (sortValue === 'name_asc') {
+                        return (a.instituteName || "").localeCompare(b.instituteName || "");
+                    } else if (sortValue === 'name_desc') {
+                        return (b.instituteName || "").localeCompare(a.instituteName || "");
+                    } else if (sortValue === 'stipend_first') {
+                        const stipendA = a.stipendPaidPast?.toLowerCase() === 'yes' ? 0 : (a.stipendPaidPast?.toLowerCase().includes('varies') ? 1 : 2);
+                        const stipendB = b.stipendPaidPast?.toLowerCase() === 'yes' ? 0 : (b.stipendPaidPast?.toLowerCase().includes('varies') ? 1 : 2);
+                        return stipendA - stipendB;
+                    }
+                    return 0;
+                });
+
+                return filtered;
+            }
+
+            function showDetailsModal(internship) {
+                modalInstituteName.textContent = internship.instituteName || 'N/A';
+                modalProgramName.textContent = internship.programName || 'N/A';
+                modalLocation.textContent = `${internship.locationCity || 'N/A'}, ${internship.locationCountry || 'N/A'}`;
+                modalDeadline.textContent = internship.lastDateDisplay || 'Varies/Check Official Site';
+                modalStipend.textContent = `${internship.stipendPaidPast || 'N/A'} ${internship.stipendDetails ? `(${internship.stipendDetails})` : ''}`;
+                modalMode.textContent = internship.modePast || 'N/A';
+                modalEligibility.innerHTML = (internship.eligibilityHighlightsPast || 'N/A').replace(/\n/g, '<br>');
+                modalDocuments.innerHTML = (internship.generalRequiredDocumentsPast || 'N/A').replace(/\n/g, '<br>');
+                
+                if (internship.officialLinkPlaceholder && internship.officialLinkPlaceholder !== '#') {
+                    modalOfficialLink.href = internship.officialLinkPlaceholder;
+                    modalOfficialLink.style.display = 'inline-block';
+                    modalOfficialLink.setAttribute('aria-label', `Visit official site for ${internship.programName || internship.instituteName}`);
+                } else {
+                    modalOfficialLink.style.display = 'none';
+                }
+                modal.style.display = 'block';
+                modal.setAttribute('aria-hidden', 'false');
+                modalCloseButton.focus();
+            }
+
+            function closeDetailsModal() {
+                modal.style.display = 'none';
+                modal.setAttribute('aria-hidden', 'true');
+            }
+
+            function toggleFavorite(internshipId, buttonElement) {
+                const index = favorites.indexOf(internshipId);
+                const heartIcon = buttonElement.querySelector('i');
+                if (index > -1) { // Was favorite, remove it
+                    favorites.splice(index, 1);
+                    buttonElement.classList.remove('active');
+                    buttonElement.title = 'Add to shortlist';
+                    if (heartIcon) heartIcon.className = 'far fa-heart'; // Corrected: Outlined heart
+                } else { // Not favorite, add it
+                    favorites.push(internshipId);
+                    buttonElement.classList.add('active');
+                    buttonElement.title = 'Remove from shortlist';
+                    if (heartIcon) heartIcon.className = 'fas fa-heart'; // Corrected: Solid heart
+                }
+                localStorage.setItem('internshipFavorites', JSON.stringify(favorites));
+                updateFavoritesCount();
+                if (currentViewIsFavorites) { // Re-render if currently viewing favorites
+                    renderInternships();
+                }
+            }
+
+            function updateFavoritesCount() {
+                favoritesCountEl.textContent = favorites.length;
+            }
+            
+            function clearAllFilters() {
+                searchBox.value = '';
+                regionFilter.value = '';
+                stipendFilter.value = '';
+                modeFilter.value = '';
+                eligibilityFilter.value = '';
+                sortBy.value = 'deadline'; // Default sort
+                if (currentViewIsFavorites) {
+                    currentViewIsFavorites = false;
+                    viewFavoritesBtn.textContent = 'View Shortlist';
+                    viewFavoritesBtn.classList.remove('active-view');
+                }
+                renderInternships();
+            }
+
+            let searchTimeout;
+            searchBox.addEventListener('keyup', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    renderInternships();
+                }, 300);
+            });
+
+            [regionFilter, stipendFilter, modeFilter, eligibilityFilter, sortBy, deadlineThresholdInput].forEach(el => {
+                el.addEventListener('change', () => {
+                     renderInternships();
+                });
+            });
+
+            clearFiltersBtn.addEventListener('click', clearAllFilters);
+            modalCloseButton.addEventListener('click', closeDetailsModal);
+            window.addEventListener('click', (event) => {
+                if (event.target == modal) {
+                    closeDetailsModal();
+                }
+            });
+            window.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && modal.style.display === 'block') {
+                    closeDetailsModal();
+                }
+            });
+
+            viewFavoritesBtn.addEventListener('click', () => {
+                currentViewIsFavorites = !currentViewIsFavorites;
+                if (currentViewIsFavorites) {
+                    viewFavoritesBtn.textContent = 'View All';
+                    viewFavoritesBtn.classList.add('active-view');
+                } else {
+                    viewFavoritesBtn.textContent = 'View Shortlist';
+                    viewFavoritesBtn.classList.remove('active-view');
+                }
+                renderInternships();
+            });
+
+            clearFavoritesBtn.addEventListener('click', () => {
+                if (favorites.length === 0) {
+                    alert("Your shortlist is already empty!");
+                    return;
+                }
+                if (confirm('Are you sure you want to clear your entire shortlist? This cannot be undone.')) {
+                    favorites = [];
+                    localStorage.removeItem('internshipFavorites');
+                    updateFavoritesCount();
+                    // Update icons on all currently rendered cards that were favorited
+                    document.querySelectorAll('.internship-card .favorite-btn.active').forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.title = 'Add to shortlist';
+                        const heartIcon = btn.querySelector('i');
+                        if (heartIcon) {
+                            heartIcon.className = 'far fa-heart'; // Corrected: Outlined heart
+                        }
+                    });
+                    if (currentViewIsFavorites) { // If in favorites view, re-render to show it's empty
+                        renderInternships();
+                    }
+                }
+            });
+        });
+        // ----- END OF APPLICATION LOGIC -----
+    </script>
+
+</body>
+</html>
